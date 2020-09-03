@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_rasan"
+            android:icon="@drawable/ic_baseline_shopping_basket_24"
+            android:title="Rasan" />
+        <item
             android:id="@+id/nav_myorder"
             android:icon="@drawable/ic_baseline_shopping_basket_24"
             android:title="My Order" />
@@ -27,6 +31,10 @@
             android:title="My Account"  />
 
     </group>
+    <item
+        android:id="@+id/nav_signout"
+        android:icon="@drawable/ic_baseline_shopping_basket_24"
+        android:title="SignOut" />
     <item android:title="Communicate">
         <menu>
 
