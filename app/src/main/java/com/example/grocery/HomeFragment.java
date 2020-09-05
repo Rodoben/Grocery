@@ -157,15 +157,15 @@ public class HomeFragment extends Fragment {
         horizontalViewAllBtn = view.findViewById(R.id.horizontal_scroll_viewall_button);
         horizontalRecyclerView=view.findViewById(R.id.horizontal_layout_recycler_view);
      List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-     horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+     horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
 
 
         HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizontalProductScrollModelList);

@@ -9,6 +9,7 @@
         android:id="@+id/horizontal_scroll_viewall_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
         android:text="View All"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
