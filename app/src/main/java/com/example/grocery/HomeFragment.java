@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,15 @@ public class HomeFragment extends Fragment {
     private ImageView stripAddImage;
     private ConstraintLayout stripAddContainer;
     ////strip add
+
+
+    /////horizontal product layout
+    private TextView horizontalLayoutTitle;
+    private Button horizontalViewAllBtn;
+    private RecyclerView horizontalRecyclerView;
+
+
+    //////horizontal product layout
 
 
     public HomeFragment() {
@@ -133,12 +144,37 @@ public class HomeFragment extends Fragment {
 
         ///////baner Slider
 
-        /////stripadd
+        /////strip add
         stripAddImage = view.findViewById(R.id.strip_add_image);
         stripAddContainer= view.findViewById(R.id.strip_add_container);
          stripAddImage.setImageResource(R.drawable.banner);
          stripAddContainer.setBackgroundColor(Color.parseColor("#000000"));
-        /////stripadd
+        /////strip add
+
+        //////horizontal product layout
+        horizontalLayoutTitle = view.findViewById(R.id.horizontal_scroll_layout_title);
+        horizontalViewAllBtn = view.findViewById(R.id.horizontal_scroll_viewall_button);
+        horizontalRecyclerView=view.findViewById(R.id.horizontal_layout_recycler_view);
+     List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
+     horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"REDMI","SD 625 Processor","rs.6999/-"));
+
+
+        HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizontalProductScrollModelList);
+         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+         horizontalRecyclerView.setLayoutManager(linearLayoutManager);
+         horizontalRecyclerView.setAdapter(horizontalProductScrollAdapter);
+         horizontalProductScrollAdapter.notifyDataSetChanged();
+
+        ///////horizontal product layout
 
       return  view;
     }
