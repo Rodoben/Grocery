@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -175,6 +176,15 @@ public class HomeFragment extends Fragment {
          horizontalProductScrollAdapter.notifyDataSetChanged();
 
         ///////horizontal product layout
+
+        ////grid product layout
+          TextView gridLayOutTitle = view.findViewById(R.id.grid_product_layout_title);
+          TextView gridViewAllBtn = view.findViewById(R.id.grid_product_layout_viewallBtn);
+        GridView gridView = view.findViewById(R.id.grid_product_layout_gridView);
+
+        gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
+
+        ////grid product layout
 
       return  view;
     }
