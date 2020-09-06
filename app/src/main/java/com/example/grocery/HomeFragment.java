@@ -179,12 +179,34 @@ public class HomeFragment extends Fragment {
 
         ////grid product layout
           TextView gridLayOutTitle = view.findViewById(R.id.grid_product_layout_title);
-          TextView gridViewAllBtn = view.findViewById(R.id.grid_product_layout_viewallBtn);
+          Button gridViewAllBtn = view.findViewById(R.id.grid_product_layout_viewallBtn);
         GridView gridView = view.findViewById(R.id.grid_product_layout_gridView);
 
         gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
 
         ////grid product layout
+
+        //////////////
+
+        RecyclerView testing =view.findViewById(R.id.testing);
+        LinearLayoutManager testingLayoutManager=new LinearLayoutManager(getContext());
+        testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        testing.setLayoutManager(testingLayoutManager);
+        List<HomePageModel> homePageModelList = new ArrayList<>();
+        homePageModelList.add(new HomePageModel(0,sliderModelList));
+        homePageModelList.add(new HomePageModel(1,R.drawable.banner1,"#000000"));
+        homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
+        homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
+
+
+
+
+        HomePageAdapter adapter = new HomePageAdapter(homePageModelList);
+        testing.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        //////////////
+
 
       return  view;
     }
