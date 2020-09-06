@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
      String icon = categoryModelList.get(position).getCategoryIconLink();
      String name = categoryModelList.get(position).getCategoryName();
-      holder.setCategoryname(name);
+      holder.setCategory(name,position);
 
     }
 
@@ -55,8 +56,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         private void setCategoryIcon(){
             //todo: set category icons here
         }
-        private void setCategoryname(String name){
+        private void setCategory(final String name, final int position){
             categoryname.setText(name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(position !=0){
+
+
+                    Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
+                    categoryIntent.putExtra("CategoryName",name);
+                    itemView.getContext().startActivity(categoryIntent);
+                }
+                }
+            });
         }
     }
 }
