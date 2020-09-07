@@ -36,11 +36,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
 
-            <include layout="@layout/product_images_layout"/>
-            <include layout="@layout/reward_with_product_layout"/>
+            <include layout="@layout/product_images_layout" />
+
+            <include layout="@layout/reward_with_product_layout" />
 
         </LinearLayout>
     </ScrollView>
