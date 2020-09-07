@@ -19,15 +19,15 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/viewpager_indicator"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tabBackground="@drawable/dot_selector"
-        app:tabIndicatorHeight="0dp"
-        app:tabRippleColor="@null"
-
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_images_viewPager"/>
+        app:layout_constraintTop_toBottomOf="@+id/product_images_viewPager"
+        app:tabBackground="@drawable/dot_selector"
+
+        app:tabIndicatorHeight="0dp"
+        app:tabRippleColor="@null" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_to_wishlist"
