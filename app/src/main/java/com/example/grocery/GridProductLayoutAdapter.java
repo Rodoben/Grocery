@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,12 +34,19 @@ public class GridProductLayoutAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, final ViewGroup viewGroup) {
         View view1;
         if (view == null){
             view1= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_scroll_item_layout,null);
            view1.setElevation(0);
            view1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            view1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent productDetailsIntent = new Intent(viewGroup.getContext(),ProductDetailsActivity.class);
+                viewGroup.getContext().startActivity(productDetailsIntent);
+                }
+            });
             ImageView productImage=view1.findViewById(R.id.imageView4);
             TextView productTitle = view1.findViewById(R.id.textView7);
             TextView productDesc = view1.findViewById(R.id.textView8);
