@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="3dp"
     android:background="#ffffff"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -35,8 +37,10 @@
         android:id="@+id/free_coupen_icon"
         android:layout_width="15dp"
         android:layout_height="15dp"
+        android:layout_marginStart="16dp"
         android:tint="#8000FF"
-        app:layout_constraintStart_toStartOf="@+id/product_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_free_coupen"
+        app:layout_constraintStart_toEndOf="@+id/product_image"
         app:layout_constraintTop_toBottomOf="@+id/product_title"
         app:srcCompat="@drawable/ic_baseline_local_offer_24" />
 
@@ -45,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="free 2 coupens"
-        android:textSize="12sp"
         android:textColor="#8000FF"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/free_coupen_icon"
         app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
@@ -99,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="coupens_applied"
+        android:text="coupens applied"
         android:textColor="#F44336"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offers_applied" />
@@ -156,7 +160,6 @@
         android:id="@+id/remove_item_btn"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginBottom="8dp"
         android:background="#ffffff"
         android:gravity="center"
         android:orientation="horizontal"
