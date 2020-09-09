@@ -28,7 +28,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private AppBarConfiguration mAppBarConfiguration;
     private FrameLayout frameLayout;
-
+    private static final int HOME_FRAGMENT = 0;
+    private static final int CART_FRAGMENT=1;
+    private static int currentFragment;
+    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
+         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
          navigationView.getMenu().getItem(0).setChecked(true);
-        setFragment(new HomeFragment());
+        setFragment(new HomeFragment(),HOME_FRAGMENT);
 
     }
 
@@ -59,8 +62,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if (currentFragment == HOME_FRAGMENT){
+            getMenuInflater().inflate(R.menu.main, menu);
+        }
+
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -72,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if(id == R.id.main_cart_icon){
-            Toast.makeText(getApplicationContext(),"hii",Toast.LENGTH_SHORT).show();
+            myCart();
             return true;
 
         }else if (id == R.id.main_search_icon){
@@ -84,7 +92,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return super.onOptionsItemSelected(item);
     }
- @SuppressWarnings("StatementWithEmptyBody")
+
+    private void myCart() {
+        invalidateOptionsMenu();
+        setFragment(new MyCartFragment(),CART_FRAGMENT);
+        navigationView.getMenu().getItem(3).setChecked(true);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -93,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }else if(id == R.id.nav_mycart)
         {
+            myCart();
 
         }else if(id == R.id.nav_myreward){
 
@@ -102,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }else if(id ==  R.id.nav_rasan){
 
+            setFragment(new HomeFragment(),HOME_FRAGMENT);
+
      }else if(id == R.id.nav_signout){
 
         }
@@ -110,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
 
     }
-    private void setFragment(Fragment fragment){
+    private void setFragment(Fragment fragment,int fragmentNo){
+        currentFragment = fragmentNo;
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(frameLayout.getId(),fragment);
          fragmentTransaction.commit();
