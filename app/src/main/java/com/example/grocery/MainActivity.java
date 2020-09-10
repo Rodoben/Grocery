@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
          navigationView.getMenu().getItem(0).setChecked(true);
-        setFragment(new HomeFragment(),HOME_FRAGMENT);
+        setFragment(new OrderDetailsFragment(),HOME_FRAGMENT);
 
     }
 

@@ -8,6 +8,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_orders_recyclerView"
         android:layout_width="match_parent"
-        android:background="#A69D9D"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#D1CFCF" />
 </FrameLayout>
