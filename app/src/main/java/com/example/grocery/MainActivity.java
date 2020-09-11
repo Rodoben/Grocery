@@ -1,9 +1,12 @@
 package com.example.grocery;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,19 +35,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int HOME_FRAGMENT = 0;
     private static final int CART_FRAGMENT=1;
     private static final int ORDER_FRAGMENT=2;
+    private static final  int MYWISHLIST_FRAGMENT=3;
+    private static final  int MYREWARDS_FRAGMENT=4;
     private static int currentFragment=-1;
-    NavigationView navigationView;
-    ImageView actionBarLogo;
+  private   NavigationView navigationView;
+   private ImageView actionBarLogo;
+    private Toolbar toolbar;
+    private Window window;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         actionBarLogo=findViewById(R.id.action_bar_logo);
         setSupportActionBar(toolbar);
 
+            window=getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-      frameLayout = findViewById(R.id.main_framelayout);
+      //frameLayout = findViewById(R.id.main_framelayout);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         // Passing each menu ID as a set of Ids because each
@@ -57,11 +66,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
          navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
          navigationView.getMenu().getItem(0).setChecked(true);
-        setFragment(new OrderDetailsFragment(),HOME_FRAGMENT);
+
+        frameLayout = findViewById(R.id.main_framelayout);
+        setFragment(new HomeFragment(),HOME_FRAGMENT);
 
     }
-
 
 
     @Override
@@ -76,6 +87,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (currentFragment == HOME_FRAGMENT) {
+
+                super.onBackPressed();
+                setFragment(new HomeFragment(),HOME_FRAGMENT);
+            } else {
+
+
+
+                actionBarLogo.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+                setFragment(new HomeFragment(),HOME_FRAGMENT);
+                navigationView.getMenu().getItem(0).setChecked(true);
+            }
+        }
     }
 
 
@@ -125,13 +158,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gotoFragment("My Cart", new MyCartFragment(),CART_FRAGMENT);
 
         }else if(id == R.id.nav_myreward){
+            gotoFragment("My Rewards",new MyRewardsFragment(),MYREWARDS_FRAGMENT);
 
         }else if(id == R.id.nav_myaccount){
 
         }else if(id == R.id.nav_mywishlist){
+            gotoFragment("My WishList",new MyWishListFragment(),MYWISHLIST_FRAGMENT);
 
         }else if(id ==  R.id.nav_rasan){
-            //getSupportActionBar().setTitle(null);
+            getSupportActionBar().setTitle(null);
 
             actionBarLogo.setVisibility(View.VISIBLE);
               invalidateOptionsMenu();
@@ -148,6 +183,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setFragment(Fragment fragment,int fragmentNo){
 
         if (fragmentNo != currentFragment){
+            if (fragmentNo == MYREWARDS_FRAGMENT){
+                 toolbar.setBackgroundColor(Color.parseColor("#7F00FF"));
+                window.setStatusBarColor(Color.parseColor("#7F00FF"));
+
+            }else {
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                window.setStatusBarColor(getResources().getColor(R.color.colorAccent));
+            }
             currentFragment = fragmentNo;
             FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
