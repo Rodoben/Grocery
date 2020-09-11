@@ -51,6 +51,7 @@
 
             <include layout="@layout/cart_total_amount_layout" />
 
+
         </LinearLayout>
 
 
