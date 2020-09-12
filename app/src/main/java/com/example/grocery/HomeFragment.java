@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment {
         homePageModelList.add(new HomePageModel(1,R.drawable.banner1,"#000000"));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
+        homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
 
 
 

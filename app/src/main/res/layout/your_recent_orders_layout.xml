@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/slider_background"
     android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
     android:layout_marginEnd="16dp"
     android:backgroundTint="#ffffff"
     android:elevation="4dp"

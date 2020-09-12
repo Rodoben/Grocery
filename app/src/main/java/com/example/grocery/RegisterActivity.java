@@ -4,15 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.security.Key;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FrameLayout frameLayout;
+    private FirebaseAuth firebaseAuth;
     public static boolean onResetPasswordFragment=false;
 
     @Override
@@ -50,4 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
         fragmentTransaction.replace(frameLayout.getId(),fragment);
         fragmentTransaction.commit();
     }
+
+
 }
