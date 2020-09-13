@@ -175,8 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setFragment(new HomeFragment(),HOME_FRAGMENT);
 
      }else if(id == R.id.nav_signout){
-            Intent i = new Intent(getApplicationContext(),AddAddressActivity.class);
-            startActivity(i);
+
 
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
