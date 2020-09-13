@@ -76,14 +76,14 @@ public class HomeFragment extends Fragment {
         ///////Banner Slider
 
          List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
+
+         sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
+        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
+        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
         sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
         sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
 
-          sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
+
 
 
 

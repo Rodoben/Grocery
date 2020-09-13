@@ -23,6 +23,8 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.grocery.MainActivity.showCart;
+
 public class ProductDetailsActivity extends AppCompatActivity {
  private ViewPager productImagesViewPager;
  private TabLayout  viewpagerIndicator;
@@ -149,7 +151,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.main_cart_icon){
-            Toast.makeText(getApplicationContext(),"hii",Toast.LENGTH_SHORT).show();
+
+            Intent cartIntent= new Intent(ProductDetailsActivity.this,MainActivity.class);
+            showCart= true;
+            startActivity(cartIntent);
             return true;
 
         }else if (id == R.id.main_search_icon){
