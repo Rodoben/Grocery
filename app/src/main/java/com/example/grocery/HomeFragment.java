@@ -3,6 +3,7 @@ package com.example.grocery;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,13 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +38,8 @@ public class HomeFragment extends Fragment {
    private RecyclerView categoryRecyclerView;
    private CategoryAdapter categoryAdapter;
   private RecyclerView testing;
+   private List<CategoryModel> categoryModelList;
+   private FirebaseFirestore firebaseFirestore;
 
 
 
@@ -52,26 +62,28 @@ public class HomeFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(layoutManager);
 
-        List<CategoryModel> categoryModelList = new ArrayList<CategoryModel>();
-        categoryModelList.add(new CategoryModel("link","Home"));
-        categoryModelList.add(new CategoryModel("link","Furniture"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-        categoryModelList.add(new CategoryModel("link","Electronics"));
-
-
+         categoryModelList = new ArrayList<CategoryModel>();
 
         categoryAdapter = new CategoryAdapter(categoryModelList);
         categoryRecyclerView.setAdapter(categoryAdapter);
-        categoryAdapter.notifyDataSetChanged();
+
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("CATEGORIES").orderBy("index").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot:task.getResult()){
+                        categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(),documentSnapshot.get("categoryName").toString()));
+                    }
+                    categoryAdapter.notifyDataSetChanged();
+                }else {
+                    String error = task.getException().getMessage();
+                    Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         ///////Banner Slider
 
@@ -122,7 +134,7 @@ public class HomeFragment extends Fragment {
         testing.setLayoutManager(testingLayoutManager);
         List<HomePageModel> homePageModelList = new ArrayList<>();
         homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.banner1,"#000000"));
+        homePageModelList.add(new HomePageModel(1,R.drawable.banner3,"#000000"));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
@@ -132,7 +144,7 @@ public class HomeFragment extends Fragment {
         homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.banner1,"#000000"));
+        homePageModelList.add(new HomePageModel(1,R.drawable.banner3,"#000000"));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
         homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
