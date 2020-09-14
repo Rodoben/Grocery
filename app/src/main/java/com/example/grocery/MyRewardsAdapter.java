@@ -13,17 +13,27 @@ import java.util.List;
 public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.Viewholder> {
 
     private List<RewardModel> rewardModelList;
+    private Boolean useminiLayout = false;
 
-    public MyRewardsAdapter(List<RewardModel> rewardModelList) {
+    public MyRewardsAdapter(List<RewardModel> rewardModelList,Boolean useminiLayout) {
         this.rewardModelList = rewardModelList;
+        this.useminiLayout = useminiLayout;
     }
 
 
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.rewards_item_layout,parent,false);
+        View view;
+      if (useminiLayout){
+           view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.rewards_item_layout,parent,false);
+      }else {
+
+          view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rewards_item_layout, parent, false);
+
+      }
         return  new Viewholder(view);
+
     }
 
     @Override
@@ -52,10 +62,22 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
 
         }
 
-        private void setDate(String title,String date,String body){
+        private void setDate(final String title, final String date, final String body){
             coupenTitle.setText(title);
             coupenExpiryDate.setText(date);
             coupenBody.setText(body);
+
+            if (useminiLayout){
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                ProductDetailsActivity.coupenTitle.setText(title);
+                ProductDetailsActivity.coupenExpiryDate.setText(date);
+                ProductDetailsActivity.coupenBody.setText(body);
+                ProductDetailsActivity.showDialogRecyclerView();
+                    }
+                });
+            }
 
 
         }

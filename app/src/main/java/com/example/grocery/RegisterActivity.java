@@ -19,13 +19,21 @@ public class RegisterActivity extends AppCompatActivity {
     private FrameLayout frameLayout;
     private FirebaseAuth firebaseAuth;
     public static boolean onResetPasswordFragment=false;
+    public static boolean setSignUpFragment = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_activity);
         frameLayout=findViewById(R.id.register_Framelayout);
-        setDefaultFragment(new SignInFragment());
+      if (setSignUpFragment){
+          setSignUpFragment=false;
+            setDefaultFragment(new SignUpFragment());
+
+      }else
+      {
+          setDefaultFragment(new SignInFragment());
+      }
 
 
     }

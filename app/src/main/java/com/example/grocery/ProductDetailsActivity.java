@@ -3,8 +3,11 @@ package com.example.grocery;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,9 +15,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +35,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
  private TabLayout  viewpagerIndicator;
  private  ViewPager productDetailsViewpager;
  private TabLayout productDetailsTablayout;
+ private Button coupenRedeemBtn;
+
+
+ ///////////coupenDialog
+    public static TextView coupenTitle;
+    public static TextView coupenExpiryDate;
+    public static  TextView coupenBody;
+    private static RecyclerView coupensRecyclerView;
+    private static LinearLayout selectedCoupen;
+    //////////coupen Dialog
 
  ///////// rating layout
     LinearLayout rateNowContainer;
@@ -56,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
           buyNowbtn = findViewById(R.id.buy_now_btn);
        productDetailsViewpager = findViewById(R.id.product_details_viewpager);
        productDetailsTablayout = findViewById(R.id.product_details_tabLayout);
-
+        coupenRedeemBtn = findViewById(R.id.coupen_redemption_btn);
 
         List<Integer> productImages = new ArrayList<>();
         productImages.add(R.drawable.banner);
@@ -126,6 +141,69 @@ public class ProductDetailsActivity extends AppCompatActivity {
               startActivity(deliveryIntent);
             }
         });
+
+
+          ////////////////coupen dialog
+        final Dialog checkCoupenPriceDalog = new Dialog(ProductDetailsActivity.this);
+        checkCoupenPriceDalog.setContentView(R.layout.coupen_redeem_dialog);
+        checkCoupenPriceDalog.setCancelable(true);
+        checkCoupenPriceDalog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        ImageView toggleRecyclerView = checkCoupenPriceDalog.findViewById(R.id.toogle_recyclerView);
+        coupensRecyclerView = checkCoupenPriceDalog.findViewById(R.id.coupen_recyclerView);
+        selectedCoupen = checkCoupenPriceDalog.findViewById(R.id.selected_coupen);
+        coupenTitle = checkCoupenPriceDalog.findViewById(R.id.coupen_title);
+        coupenExpiryDate = checkCoupenPriceDalog.findViewById(R.id.coupen_validity);
+        coupenBody = checkCoupenPriceDalog.findViewById(R.id.coupen_body);
+
+        TextView originalPrice = checkCoupenPriceDalog.findViewById(R.id.original_price);
+        TextView discountedPrice = checkCoupenPriceDalog.findViewById(R.id.discounted_price);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ProductDetailsActivity.this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        coupensRecyclerView.setLayoutManager(layoutManager);
+        List<RewardModel> rewardModelList = new ArrayList<>();
+        rewardModelList.add(new RewardModel("cashback","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+        rewardModelList.add(new RewardModel("cashback","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+        rewardModelList.add(new RewardModel("Buy one Get 1 free","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+        rewardModelList.add(new RewardModel("cashback","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+        rewardModelList.add(new RewardModel("Discount","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+        rewardModelList.add(new RewardModel("cashback","till 2nd,June 2020","Get 20% off on mohanbhog sweets above rs 200"));
+
+        MyRewardsAdapter myRewardsAdapter = new MyRewardsAdapter(rewardModelList,true);
+        coupensRecyclerView.setAdapter(myRewardsAdapter);
+        myRewardsAdapter.notifyDataSetChanged();
+
+
+        toggleRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogRecyclerView();
+            }
+        });
+
+
+//////////////////coupen dialog
+
+          coupenRedeemBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+
+                   checkCoupenPriceDalog.show();
+              }
+          });
+
+
+    }
+
+    public static  void  showDialogRecyclerView(){
+        if (coupensRecyclerView.getVisibility() == View.GONE)
+        {
+            coupensRecyclerView.setVisibility(View.VISIBLE);
+            selectedCoupen.setVisibility(View.GONE);
+        }else {
+            coupensRecyclerView.setVisibility(View.GONE);
+            selectedCoupen.setVisibility(View.VISIBLE);
+        }
 
     }
 
