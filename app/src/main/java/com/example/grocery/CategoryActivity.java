@@ -29,58 +29,12 @@ public class CategoryActivity extends AppCompatActivity {
        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       categoryRecyclerView = findViewById(R.id.category_recycler_view);
 
-        ///////Banner Slider
-
-        List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
-        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.logo,"#0000A0"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"#0000A0"));
-
-
-
-        ///////baner Slider
-
-        /////strip add
-
-        /////strip add
-
-        //////horizontal product layout
-
-        List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1,"REDMI","SD 625 Processor","rs.6999/-"));
-
-
-        ///////horizontal product layout
-
-        ////grid product layout
-
-
-        ////grid product layout
-
-        //////////////
 
 
         LinearLayoutManager testingLayoutManager=new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         categoryRecyclerView.setLayoutManager(testingLayoutManager);
         List<HomePageModel> homePageModelList = new ArrayList<>();
-        homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.banner1,"#000000"));
-        homePageModelList.add(new HomePageModel(2,"Deals of The Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(3,"Ronald",horizontalProductScrollModelList));
 
 
 
@@ -89,7 +43,7 @@ public class CategoryActivity extends AppCompatActivity {
         categoryRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        //////////////
+
 
 
     }
