@@ -69,25 +69,7 @@ public class ViewAllActivity extends AppCompatActivity {
 
             gridView.setVisibility(View.VISIBLE);
             List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner1, "REDMI", "SD 625 Processor", "rs.6999/-"));
-
+            
             GridProductLayoutAdapter gridProductLayoutAdapter = new GridProductLayoutAdapter(horizontalProductScrollModelList);
             gridView.setAdapter(gridProductLayoutAdapter);
         }
