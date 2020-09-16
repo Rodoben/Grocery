@@ -7,7 +7,7 @@
     android:elevation="3dp"
     android:padding="8dp"
    android:background="@drawable/slider_background"
-    android:backgroundTint="#00FFFFFF"
+    android:backgroundTint="#FFFFFF"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

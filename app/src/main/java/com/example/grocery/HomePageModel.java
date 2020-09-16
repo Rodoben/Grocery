@@ -65,8 +65,25 @@ public static final int GRID_PRODUCT_VIEW =3;
 
     private String title;
     private List<HorizontalProductScrollModel> horizontalProductScrollModelList;
+    private List<WishListModel> viewAllProductList;
 
-    public HomePageModel(int type, String title,String backgroundColor, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+    public HomePageModel(int type, String title,String backgroundColor, List<HorizontalProductScrollModel> horizontalProductScrollModelList,List<WishListModel> viewAllProductList) {
+        this.type = type;
+        this.title = title;
+        this.backgroundColor= backgroundColor;
+        this.horizontalProductScrollModelList = horizontalProductScrollModelList;
+        this.viewAllProductList=viewAllProductList;
+    }
+
+    public List<WishListModel> getViewAllProductList() {
+        return viewAllProductList;
+    }
+
+    public void setViewAllProductList(List<WishListModel> viewAllProductList) {
+        this.viewAllProductList = viewAllProductList;
+    }
+
+    public HomePageModel(int type, String title, String backgroundColor, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
         this.type = type;
         this.title = title;
         this.backgroundColor= backgroundColor;

@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.grocery.ViewAllActivity.wishListModelList;
+
 public class HomePageAdapter extends RecyclerView.Adapter {
 
     private List<HomePageModel> homePageModelList;
@@ -94,8 +96,9 @@ public class HomePageAdapter extends RecyclerView.Adapter {
              case HomePageModel.HORIZONTAL_ALL_PRODUCT:
                  String layoutColor = homePageModelList.get(position).getBackgroundColor();
               String horizontalLayoutTitle = homePageModelList.get(position).getTitle();
+              List<WishListModel> viewAllProductList=homePageModelList.get(position).getViewAllProductList();
               List<HorizontalProductScrollModel> horizontalProductScrollModelList = homePageModelList.get(position).getHorizontalProductScrollModelList();
-                 ((HorizontalProductViewholder)holder).setHorizontalProductLayout(horizontalProductScrollModelList,horizontalLayoutTitle,layoutColor);
+                 ((HorizontalProductViewholder)holder).setHorizontalProductLayout(horizontalProductScrollModelList,horizontalLayoutTitle,layoutColor,viewAllProductList);
                    break;
                  case HomePageModel.GRID_PRODUCT_VIEW:
                      String gridLayoutcolor = homePageModelList.get(position).getBackgroundColor();
@@ -258,7 +261,7 @@ public class HomePageAdapter extends RecyclerView.Adapter {
 
         }
 
-        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, String title,String color){
+        private void setHorizontalProductLayout(List<HorizontalProductScrollModel> horizontalProductScrollModelList, final String title, String color, final List<WishListModel> viewAllProductList){
               container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             horizontalLayoutTitle.setText(title);
 if(horizontalProductScrollModelList.size()> 8){
@@ -266,8 +269,10 @@ if(horizontalProductScrollModelList.size()> 8){
     horizontalViewAllBtn.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+        ViewAllActivity.wishListModelList = viewAllProductList;
             Intent viewAllIntent = new Intent(itemView.getContext(),ViewAllActivity.class);
             viewAllIntent.putExtra("layout_code",0);
+            viewAllIntent.putExtra("title",title);
             itemView.getContext().startActivity(viewAllIntent);
         }
     });

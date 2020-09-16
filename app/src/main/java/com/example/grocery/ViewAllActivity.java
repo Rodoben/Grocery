@@ -20,10 +20,7 @@ public class ViewAllActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GridView gridView;
 public static  List<HorizontalProductScrollModel> horizontalProductScrollModelList;
-
-
-
-
+public static List<WishListModel> wishListModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +44,6 @@ public static  List<HorizontalProductScrollModel> horizontalProductScrollModelLi
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            List<WishListModel> wishListModelList = new ArrayList<>();
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3", 145, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 0, "3.2", 145, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3.5", 15, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 2, "3.6,", 14, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3", 5, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 4, "3", 15, "50098/-", "233645/-", "Cash on delivery"));
-
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3", 145, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 0, "3.2", 145, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3.5", 15, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 2, "3.6,", 14, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 1, "3", 5, "50098/-", "233645/-", "Cash on delivery"));
-            wishListModelList.add(new WishListModel(R.drawable.banner1, "Pixel 2", 4, "3", 15, "50098/-", "233645/-", "Cash on delivery"));
 
 
             WishListAdapter adapter = new WishListAdapter(wishListModelList, false);
