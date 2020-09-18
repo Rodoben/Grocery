@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
@@ -52,7 +53,14 @@ public class HomeFragment extends Fragment {
    private RecyclerView categoryRecyclerView;
    private CategoryAdapter categoryAdapter;
   private RecyclerView homepageRecyclerView;
+  private List<HomePageModel> homePageModelFakeList = new ArrayList<>();
+
 private ImageView noInternetConnection;
+   private ConnectivityManager connectivityManager;
+    private  NetworkInfo networkInfo;
+    public static SwipeRefreshLayout swipeRefreshLayout;
+
+    private List<CategoryModel> categoryModelFakeList = new ArrayList<>();
 
 
 
@@ -67,46 +75,91 @@ private ImageView noInternetConnection;
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_home, container, false);
          noInternetConnection = view.findViewById(R.id.no_internet_connection);
+          swipeRefreshLayout = view.findViewById(R.id.refresh_layout);
+        swipeRefreshLayout.setColorSchemeColors(getContext().getResources().getColor(R.color.red), getContext().getResources().getColor(R.color.green),getContext().getResources().getColor(R.color.colorAccent));
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        categoryRecyclerView = view.findViewById(R.id.category_recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        categoryRecyclerView.setLayoutManager(layoutManager);
+
+        homepageRecyclerView =view.findViewById(R.id.home_page_recyclerview);
+        LinearLayoutManager testingLayoutManager=new LinearLayoutManager(getContext());
+        testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        homepageRecyclerView.setLayoutManager(testingLayoutManager);
+
+
+
+        ////////////////homepage fake list
+
+        List<SliderModel> sliderModelFakeList = new ArrayList<>();
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+
+
+        List<HorizontalProductScrollModel> horizontalProductScrollModelFakeList = new ArrayList<>();
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+        horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
+
+        homePageModelFakeList.add(new HomePageModel(0,sliderModelFakeList));
+        homePageModelFakeList.add(new HomePageModel(1,"","#ffffff"));
+        homePageModelFakeList.add(new HomePageModel(2,"","#ffffff",horizontalProductScrollModelFakeList,new ArrayList<WishListModel>()));
+        homePageModelFakeList.add(new HomePageModel(3,"","#ffffff",horizontalProductScrollModelFakeList));
+
+
+        /////////////////homepage fake list
+
+
+
+
+
+
+//////////////////category fake list
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("null",""));
+/////////////////category fake list
+        categoryAdapter = new CategoryAdapter(categoryModelFakeList);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+        adapter = new HomePageAdapter(homePageModelFakeList);
+        homepageRecyclerView.setAdapter(adapter);
+
+        connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()==true) {
             noInternetConnection.setVisibility(View.GONE);
-            categoryRecyclerView = view.findViewById(R.id.category_recyclerView);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            categoryRecyclerView.setLayoutManager(layoutManager);
-
-
-
-            categoryAdapter = new CategoryAdapter(categoryModelList);
-            categoryRecyclerView.setAdapter(categoryAdapter);
 
             if (categoryModelList.size() == 0){
-                loadCategories(categoryAdapter,getContext());
+                loadCategories(categoryRecyclerView,getContext());
 
             }else {
                 categoryAdapter.notifyDataSetChanged();
             }
 
-
-
-
-            homepageRecyclerView =view.findViewById(R.id.home_page_recyclerview);
-            LinearLayoutManager testingLayoutManager=new LinearLayoutManager(getContext());
-            testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            homepageRecyclerView.setLayoutManager(testingLayoutManager);
-
-
-
-
-
             if (lists.size() == 0){
                 loadedCategoriesnames.add("HOME");
                 lists.add(new ArrayList<HomePageModel>());
-                adapter = new HomePageAdapter(lists.get(0));
 
-                loadFragmentData(adapter,getContext(),0,"HOME");
+
+                loadFragmentData(homepageRecyclerView,getContext(),0,"HOME");
 
             }else {
                 adapter = new HomePageAdapter(lists.get(0));
@@ -114,7 +167,7 @@ private ImageView noInternetConnection;
             }
 
 
-            homepageRecyclerView.setAdapter(adapter);
+
 
         }else {
             Glide.with(this).load(R.drawable.noconnection).into(noInternetConnection);
@@ -122,7 +175,37 @@ private ImageView noInternetConnection;
 
         }
 
+/////////////refresh Layout
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
 
+
+                swipeRefreshLayout.setRefreshing(true);
+                categoryModelList.clear();
+                lists.clear();
+                loadedCategoriesnames.clear();
+                if (networkInfo != null && networkInfo.isConnected()==true) {
+                    noInternetConnection.setVisibility(View.GONE);
+
+                    categoryRecyclerView.setAdapter(categoryAdapter);
+                   homepageRecyclerView.setAdapter(adapter);
+
+                    loadCategories(categoryRecyclerView,getContext());
+                    loadedCategoriesnames.add("HOME");
+                    lists.add(new ArrayList<HomePageModel>());
+                    loadFragmentData(homepageRecyclerView,getContext(),0,"HOME");
+
+                }else {
+                    Glide.with(getContext()).load(R.drawable.noconnection).into(noInternetConnection);
+                    noInternetConnection.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+
+/////////////refresh layout
 
 
 
