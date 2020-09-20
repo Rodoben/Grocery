@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +60,7 @@ private ImageView noInternetConnection;
    private ConnectivityManager connectivityManager;
     private  NetworkInfo networkInfo;
     public static SwipeRefreshLayout swipeRefreshLayout;
+    private Button retryBtn;
 
     private List<CategoryModel> categoryModelFakeList = new ArrayList<>();
 
@@ -76,6 +78,7 @@ private ImageView noInternetConnection;
         View view= inflater.inflate(R.layout.fragment_home, container, false);
          noInternetConnection = view.findViewById(R.id.no_internet_connection);
           swipeRefreshLayout = view.findViewById(R.id.refresh_layout);
+          retryBtn = view.findViewById(R.id.retry_btn);
         swipeRefreshLayout.setColorSchemeColors(getContext().getResources().getColor(R.color.red), getContext().getResources().getColor(R.color.green),getContext().getResources().getColor(R.color.colorAccent));
 
 
@@ -94,12 +97,12 @@ private ImageView noInternetConnection;
         ////////////////homepage fake list
 
         List<SliderModel> sliderModelFakeList = new ArrayList<>();
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
-        sliderModelFakeList.add(new SliderModel("null","#ffffff"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
+        sliderModelFakeList.add(new SliderModel("null","#dfdfdf"));
 
 
         List<HorizontalProductScrollModel> horizontalProductScrollModelFakeList = new ArrayList<>();
@@ -113,9 +116,9 @@ private ImageView noInternetConnection;
         horizontalProductScrollModelFakeList.add(new HorizontalProductScrollModel("","","","",""));
 
         homePageModelFakeList.add(new HomePageModel(0,sliderModelFakeList));
-        homePageModelFakeList.add(new HomePageModel(1,"","#ffffff"));
-        homePageModelFakeList.add(new HomePageModel(2,"","#ffffff",horizontalProductScrollModelFakeList,new ArrayList<WishListModel>()));
-        homePageModelFakeList.add(new HomePageModel(3,"","#ffffff",horizontalProductScrollModelFakeList));
+        homePageModelFakeList.add(new HomePageModel(1,"","#dfdfdf"));
+        homePageModelFakeList.add(new HomePageModel(2,"","#dfdfdf",horizontalProductScrollModelFakeList,new ArrayList<WishListModel>()));
+        homePageModelFakeList.add(new HomePageModel(3,"","#dfdfdf",horizontalProductScrollModelFakeList));
 
 
         /////////////////homepage fake list
@@ -127,32 +130,38 @@ private ImageView noInternetConnection;
 
 //////////////////category fake list
         categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
-        categoryModelFakeList.add(new CategoryModel("null",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
+        categoryModelFakeList.add(new CategoryModel("",""));
 /////////////////category fake list
         categoryAdapter = new CategoryAdapter(categoryModelFakeList);
-        categoryRecyclerView.setAdapter(categoryAdapter);
+
         adapter = new HomePageAdapter(homePageModelFakeList);
-        homepageRecyclerView.setAdapter(adapter);
+
 
         connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()==true) {
+             MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             noInternetConnection.setVisibility(View.GONE);
+            retryBtn.setVisibility(View.GONE);
+            categoryRecyclerView.setVisibility(View.VISIBLE);
+            homepageRecyclerView.setVisibility(View.VISIBLE);
 
             if (categoryModelList.size() == 0){
                 loadCategories(categoryRecyclerView,getContext());
 
             }else {
+                categoryAdapter = new CategoryAdapter(categoryModelList);
                 categoryAdapter.notifyDataSetChanged();
             }
+            categoryRecyclerView.setAdapter(categoryAdapter);
 
             if (lists.size() == 0){
                 loadedCategoriesnames.add("HOME");
@@ -166,12 +175,16 @@ private ImageView noInternetConnection;
                 adapter.notifyDataSetChanged();
             }
 
-
+            homepageRecyclerView.setAdapter(adapter);
 
 
         }else {
+            MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            categoryRecyclerView.setVisibility(View.GONE);
+            homepageRecyclerView.setVisibility(View.GONE);
             Glide.with(this).load(R.drawable.noconnection).into(noInternetConnection);
             noInternetConnection.setVisibility(View.VISIBLE);
+            retryBtn.setVisibility(View.VISIBLE);
 
         }
 
@@ -179,31 +192,19 @@ private ImageView noInternetConnection;
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-
                 swipeRefreshLayout.setRefreshing(true);
-                categoryModelList.clear();
-                lists.clear();
-                loadedCategoriesnames.clear();
-                if (networkInfo != null && networkInfo.isConnected()==true) {
-                    noInternetConnection.setVisibility(View.GONE);
+                reloadPage();
 
-                    categoryRecyclerView.setAdapter(categoryAdapter);
-                   homepageRecyclerView.setAdapter(adapter);
-
-                    loadCategories(categoryRecyclerView,getContext());
-                    loadedCategoriesnames.add("HOME");
-                    lists.add(new ArrayList<HomePageModel>());
-                    loadFragmentData(homepageRecyclerView,getContext(),0,"HOME");
-
-                }else {
-                    Glide.with(getContext()).load(R.drawable.noconnection).into(noInternetConnection);
-                    noInternetConnection.setVisibility(View.VISIBLE);
-                }
 
             }
         });
+retryBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
 
+        reloadPage();
+    }
+});
 
 /////////////refresh layout
 
@@ -212,5 +213,45 @@ private ImageView noInternetConnection;
 
       return  view;
     }
+
+    private void reloadPage(){
+
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+
+
+        categoryModelList.clear();
+        lists.clear();
+        loadedCategoriesnames.clear();
+        if (networkInfo != null && networkInfo.isConnected()==true) {
+            MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            noInternetConnection.setVisibility(View.GONE);
+            retryBtn.setVisibility(View.GONE);
+            categoryRecyclerView.setVisibility(View.VISIBLE);
+            homepageRecyclerView.setVisibility(View.VISIBLE);
+            categoryAdapter = new CategoryAdapter(categoryModelFakeList);
+            adapter = new HomePageAdapter(homePageModelFakeList);
+            categoryRecyclerView.setAdapter(categoryAdapter);
+            homepageRecyclerView.setAdapter(adapter);
+
+            loadCategories(categoryRecyclerView,getContext());
+            loadedCategoriesnames.add("HOME");
+            lists.add(new ArrayList<HomePageModel>());
+            loadFragmentData(homepageRecyclerView,getContext(),0,"HOME");
+
+        }else {
+            MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            Toast.makeText(getContext(),"No Connection found",Toast.LENGTH_LONG).show();
+            categoryRecyclerView.setVisibility(View.GONE);
+            homepageRecyclerView.setVisibility(View.GONE);
+            retryBtn.setVisibility(View.VISIBLE);
+            Glide.with(getContext()).load(R.drawable.noconnection).into(noInternetConnection);
+            noInternetConnection.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+
+    }
+
+
 
 }

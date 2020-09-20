@@ -19,9 +19,9 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
         firebaseAuth = FirebaseAuth.getInstance();
         SystemClock.sleep(3000);
-        Intent loginIntent= new Intent(SplashScreen.this, RegisterActivity.class);
-        startActivity(loginIntent);
-        finish();
+       // Intent loginIntent= new Intent(SplashScreen.this, RegisterActivity.class);
+       // startActivity(loginIntent);
+        //finish();
     }
 
     @Override

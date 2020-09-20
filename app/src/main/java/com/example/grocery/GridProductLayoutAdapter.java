@@ -37,7 +37,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, final ViewGroup viewGroup) {
+    public View getView(final int i, View view, final ViewGroup viewGroup) {
         View view1;
         if (view == null){
             view1= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_scroll_item_layout,null);
@@ -47,6 +47,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     Intent productDetailsIntent = new Intent(viewGroup.getContext(),ProductDetailsActivity.class);
+                    productDetailsIntent.putExtra("PRODUCT_ID",horizontalProductScrollModelList.get(i).getProductId());
                 viewGroup.getContext().startActivity(productDetailsIntent);
                 }
             });
@@ -56,7 +57,7 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             TextView productPrice = view1.findViewById(R.id.textView9);
 
             //Glide.with(horizontalProductScrollModelList.get(i).getProduct_Image());
-            Glide.with(viewGroup.getContext()).load(horizontalProductScrollModelList.get(i).getProduct_Image()).apply(new RequestOptions().placeholder(R.drawable.banner1)).into(productImage);
+            Glide.with(viewGroup.getContext()).load(horizontalProductScrollModelList.get(i).getProduct_Image()).apply(new RequestOptions().placeholder(R.drawable.placeholder)).into(productImage);
             productTitle.setText(horizontalProductScrollModelList.get(i).getProductTitle());
             productDesc.setText(horizontalProductScrollModelList.get(i).getProductDesc());
             productPrice.setText("Rs."+horizontalProductScrollModelList.get(i).getProductPrice()+"/-");

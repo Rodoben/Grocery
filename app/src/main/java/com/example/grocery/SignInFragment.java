@@ -43,6 +43,9 @@ private ProgressBar progressBar;
    private FirebaseAuth firebaseAuth;
    private TextView forgotPassword;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+
+    public static boolean disableCloseBtn = false;
+
     public SignInFragment() {
         // Required empty public constructor
     }
@@ -63,6 +66,11 @@ private ProgressBar progressBar;
         progressBar=view.findViewById(R.id.progressBar3);
         firebaseAuth=FirebaseAuth.getInstance();
         parentFramelayout=getActivity().findViewById(R.id.register_Framelayout);
+     if (disableCloseBtn){
+         closebtn.setVisibility(View.GONE);
+     }else {
+         closebtn.setVisibility(View.VISIBLE);
+     }
          return view;
     }
 
@@ -86,9 +94,7 @@ private ProgressBar progressBar;
          closebtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 Intent mainIntent = new Intent(getActivity(),MainActivity.class);
-                 startActivity(mainIntent);
-                 getActivity().finish();
+                 mainIntent();
 
 
 
@@ -133,6 +139,20 @@ checkInputs();
             checkEmailandPassword();
         }
     });
+    }
+
+    private void mainIntent() {
+
+        if (disableCloseBtn) {
+            disableCloseBtn = false;
+
+        } else {
+            Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+            startActivity(mainIntent);
+
+
+        }
+        getActivity().finish();
     }
 
     private void checkEmailandPassword() {

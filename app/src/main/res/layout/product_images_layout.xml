@@ -155,7 +155,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cod_indicator_imageView" />
 
     <LinearLayout
-        android:id="@+id/copen_redemption_layout"
+        android:id="@+id/coupen_redemption_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

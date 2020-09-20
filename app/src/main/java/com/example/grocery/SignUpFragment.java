@@ -49,6 +49,7 @@ public class SignUpFragment extends Fragment {
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    public static boolean disableCloseBtn = false;
 
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     public SignUpFragment() {
@@ -72,6 +73,13 @@ public class SignUpFragment extends Fragment {
       progressBar=view.findViewById(R.id.progressBar);
       firebaseAuth=FirebaseAuth.getInstance();
       firebaseFirestore=FirebaseFirestore.getInstance();
+        if (disableCloseBtn){
+            closeBtn.setVisibility(View.GONE);
+        }else {
+            closeBtn.setVisibility(View.VISIBLE);
+        }
+
+
         return view;
     }
 
@@ -184,9 +192,7 @@ cnfpass.addTextChangedListener(new TextWatcher() {
                           @Override
                           public void onComplete(@NonNull Task<DocumentReference> task) {
                               if (task.isSuccessful()){
-                                  Intent mainIntent = new Intent(getActivity(),MainActivity.class);
-                                  startActivity(mainIntent);
-                                  getActivity().finish();
+                                  mainIntent();
 
                               }else{
                                   progressBar.setVisibility(View.INVISIBLE);
@@ -214,6 +220,19 @@ cnfpass.addTextChangedListener(new TextWatcher() {
      }else{
               email.setError("Invalid Email!");
      }
+    }
+
+    private void mainIntent() {
+        if (disableCloseBtn) {
+            disableCloseBtn = false;
+
+        } else {
+            Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+            startActivity(mainIntent);
+
+
+        }
+        getActivity().finish();
     }
 
     private void checkInputs() {
