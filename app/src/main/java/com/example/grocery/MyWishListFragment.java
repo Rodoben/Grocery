@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,8 @@ import java.util.List;
 public class MyWishListFragment extends Fragment {
 
     private RecyclerView wishlistRecyclerView;
+    private Dialog loadingDialog;
+    public static WishListAdapter wishListAdapter;
     public MyWishListFragment() {
         // Required empty public constructor
     }
@@ -29,15 +32,29 @@ public class MyWishListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_my_wish_list, container, false);
+
+        loadingDialog = new Dialog(getContext());
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
+
          wishlistRecyclerView = view.findViewById(R.id.my_wishlist_recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         wishlistRecyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WishListModel> wishListModelList = new ArrayList<>();
+      //  List<WishListModel> wishListModelList = new ArrayList<>();
 
-
-        WishListAdapter wishListAdapter = new WishListAdapter(wishListModelList,true);
+          if (DBqueries.wishListModelList.size() == 0){
+              DBqueries.wishList.clear();
+              DBqueries.loadWishList(getContext(),loadingDialog,true);
+          }
+          else {
+              loadingDialog.dismiss();
+          }
+        wishListAdapter = new WishListAdapter(DBqueries.wishListModelList,true);
         wishlistRecyclerView.setAdapter(wishListAdapter);
         wishListAdapter.notifyDataSetChanged();
 

@@ -37,7 +37,7 @@
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
-        app:rippleColor="@color/colorAccent"
+        app:rippleColor="#ffffff"
         android:tint="#878181"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
