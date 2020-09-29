@@ -414,34 +414,32 @@ private TextView totalRatingsFigure;
                           signInDialog.show();
                       }
                       else {
-                          if (!running_ratingquery){
-                              running_ratingquery=true;
+                          if (starPosition!=initialRating){
+
+                          if (!running_ratingquery) {
+                              running_ratingquery = true;
 
 
-                          setRating(starPosition);
+                              setRating(starPosition);
                               Map<String, Object> updateRating = new HashMap<>();
 
-                          if (DBqueries.myRatedIds.contains(productID)){
-                              TextView oldrating = (TextView) ratingsNoContainer.getChildAt(5 - initialRating - 1);
-                              TextView finalrating = (TextView) ratingsNoContainer.getChildAt(5 - starPosition - 1);
-                              updateRating.put(initialRating+1+"_star",Long.parseLong(oldrating.getText().toString())-1);
-                              updateRating.put(starPosition+1+"_star",Long.parseLong(finalrating.getText().toString())+1);
-                              updateRating.put("average_rating",String.valueOf(calculateAverageRating((long)starPosition+1)));
+                              if (DBqueries.myRatedIds.contains(productID)) {
+                                  TextView oldrating = (TextView) ratingsNoContainer.getChildAt(5 - initialRating - 1);
+                                  TextView finalrating = (TextView) ratingsNoContainer.getChildAt(5 - starPosition - 1);
+                                  updateRating.put(initialRating + 1 + "_star", Long.parseLong(oldrating.getText().toString()) - 1);
+                                  updateRating.put(starPosition + 1 + "_star", Long.parseLong(finalrating.getText().toString()) + 1);
+                                  updateRating.put("average_rating", calculateAverageRating((long) starPosition - initialRating, true));
 
 
-
-                          }else {
-
+                              } else {
 
 
-                              updateRating.put(starPosition + 1 + "_star", (long) documentSnapshot.get(starPosition + 1 + "_star") + 1);
-                              updateRating.put("average_rating",String.valueOf(calculateAverageRating((long)starPosition+1)));
-                              updateRating.put("total_ratings", (long) documentSnapshot.get("total_ratings") + 1);
+                                  updateRating.put(starPosition + 1 + "_star", (long) documentSnapshot.get(starPosition + 1 + "_star") + 1);
+                                  updateRating.put("average_rating", calculateAverageRating((long) starPosition + 1, false));
+                                  updateRating.put("total_ratings", (long) documentSnapshot.get("total_ratings") + 1);
 
 
-
-
-                          }
+                              }
                               firebaseFirestore.collection("PRODUCTS").document(productID)
                                       .update(updateRating).addOnCompleteListener(new OnCompleteListener<Void>() {
                                   @Override
@@ -449,20 +447,18 @@ private TextView totalRatingsFigure;
 
                                       if (task.isSuccessful()) {
                                           Map<String, Object> myRating = new HashMap<>();
-                                          if (DBqueries.myRatedIds.contains(productID)){
+                                          if (DBqueries.myRatedIds.contains(productID)) {
 
-                                              myRating.put("rating_"+DBqueries.myRatedIds.indexOf(productID),(long)starPosition+1);
+                                              myRating.put("rating_" + DBqueries.myRatedIds.indexOf(productID), (long) starPosition + 1);
 
 
-                                          }else {
+                                          } else {
 
-                                              myRating.put("list_size",(long)DBqueries.myRatedIds.size()+1);
+                                              myRating.put("list_size", (long) DBqueries.myRatedIds.size() + 1);
                                               myRating.put("product_id_" + DBqueries.myRatedIds.size(), productID);
                                               myRating.put("rating_" + DBqueries.myRatedIds.size(), (long) starPosition + 1);
 
                                           }
-
-
 
 
                                           firebaseFirestore.collection("USERS").document(currentUser.getUid()).collection("USER_DATA").document("MY_RATINGS")
@@ -471,16 +467,16 @@ private TextView totalRatingsFigure;
                                               public void onComplete(@NonNull Task<Void> task) {
                                                   if (task.isSuccessful()) {
 
-                                                      if (DBqueries.myRatedIds.contains(productID)){
+                                                      if (DBqueries.myRatedIds.contains(productID)) {
 
-                                                          DBqueries.myRating.set(DBqueries.myRatedIds.indexOf(productID),(long)starPosition+1);
+                                                          DBqueries.myRating.set(DBqueries.myRatedIds.indexOf(productID), (long) starPosition + 1);
 
                                                           TextView oldrating = (TextView) ratingsNoContainer.getChildAt(5 - initialRating - 1);
                                                           TextView finalrating = (TextView) ratingsNoContainer.getChildAt(5 - starPosition - 1);
                                                           oldrating.setText(String.valueOf(Integer.parseInt(oldrating.getText().toString()) - 1));
                                                           finalrating.setText(String.valueOf(Integer.parseInt(finalrating.getText().toString()) + 1));
 
-                                                      }else {
+                                                      } else {
 
                                                           DBqueries.myRatedIds.add(productID);
                                                           DBqueries.myRating.add((long) starPosition + 1);
@@ -500,18 +496,18 @@ private TextView totalRatingsFigure;
                                                           //ratingfigures.setText(String.valueOf((long)documentSnapshot.get((5-x)+"_star")));
 
                                                           ProgressBar progressBar = (ProgressBar) ratingsProgressBarContainer.getChildAt(x);
-                                                          if (DBqueries.myRatedIds.contains(productID)) {
-                                                              int maxProgress = Integer.parseInt(String.valueOf((long) documentSnapshot.get("total_ratings") + 1));
-                                                              progressBar.setMax(maxProgress);
-                                                          }
+
+                                                          int maxProgress = Integer.parseInt(totalRatingsFigure.getText().toString());
+                                                          progressBar.setMax(maxProgress);
+
                                                           progressBar.setProgress(Integer.parseInt(ratingfigures.getText().toString()));
 
                                                       }
-                                                      initialRating =starPosition;
-                                                      averageRating.setText(String.valueOf(calculateAverageRating(0)));
-                                                      averageRatingMiniView.setText(String.valueOf(calculateAverageRating(0)));
+                                                      initialRating = starPosition;
+                                                      averageRating.setText(calculateAverageRating(0, true));
+                                                      averageRatingMiniView.setText(calculateAverageRating(0, true));
 
-                                                      if (DBqueries.wishList.contains(productID) && DBqueries.wishListModelList.size() !=0){
+                                                      if (DBqueries.wishList.contains(productID) && DBqueries.wishListModelList.size() != 0) {
 
 
                                                           int index = DBqueries.wishList.indexOf(productID);
@@ -542,9 +538,7 @@ private TextView totalRatingsFigure;
                               });
 
 
-
-
-
+                          }
                           }
                       }
                   }
@@ -693,16 +687,20 @@ private TextView totalRatingsFigure;
     }
 
 
-    private float calculateAverageRating(long CurrentUserRating){
-        long totalStars = 0;
-        for (int x = 1;x<6;x++){
-            TextView ratingno = (TextView) ratingsNoContainer.getChildAt(x-1);
-           totalStars = totalStars+ (Long.parseLong(ratingno.getText().toString())*x);
+    private String calculateAverageRating(long CurrentUserRating,boolean update) {
+        Double totalStars = Double.valueOf(0);
+        for (int x = 1; x < 6; x++) {
+            TextView ratingno = (TextView) ratingsNoContainer.getChildAt(5 - x);
+            totalStars = totalStars + (Long.parseLong(ratingno.getText().toString()) * x);
         }
-        totalStars=totalStars + CurrentUserRating;
-      return   totalStars/((long)documentSnapshot.get("total_ratings")+1);
-    }
+        totalStars = totalStars + CurrentUserRating;
 
+        if (update) {
+            return String.valueOf(totalStars / Long.parseLong(totalRatingsFigure.getText().toString())).substring(0,3);
+        } else {
+            return String.valueOf(totalStars / (Long.parseLong(totalRatingsFigure.getText().toString()) + 1)).substring(0,3);
+        }
+    }
 
     @Override
     protected void onStart() {
