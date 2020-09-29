@@ -28,7 +28,9 @@ import java.util.Map;
 
 import static com.example.grocery.HomeFragment.swipeRefreshLayout;
 import static com.example.grocery.ProductDetailsActivity.addToWishListBtn;
+import static com.example.grocery.ProductDetailsActivity.initialRating;
 import static com.example.grocery.ProductDetailsActivity.productID;
+import static com.example.grocery.ProductDetailsActivity.setRating;
 
 public class DBqueries {
 
@@ -40,6 +42,9 @@ public class DBqueries {
     public  static List <String> loadedCategoriesnames = new ArrayList<>();
     public static List<String> wishList = new ArrayList<>();
     public static List<WishListModel> wishListModelList = new ArrayList<>();
+
+    public static  List<String> myRatedIds = new ArrayList<>();
+    public static List<Long> myRating = new ArrayList<>();
 
     public static void loadCategories(final RecyclerView categoryRecyclerView, final Context context){
            categoryModelList.clear();
@@ -258,6 +263,52 @@ public class DBqueries {
                     }
                 });
     }
+
+  public static  void  loadRatingList(final Context context){
+
+        if (!ProductDetailsActivity.running_ratingquery) {
+            ProductDetailsActivity.running_ratingquery=true;
+
+            myRatedIds.clear();
+            myRating.clear();
+
+
+            firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_RATINGS")
+                    .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                    if (task.isSuccessful()) {
+
+                        for (long x = 0; x < (long) task.getResult().get("list_size"); x++) {
+
+                            myRatedIds.add(task.getResult().get("product_id_" + x).toString());
+                            myRating.add((long) task.getResult().get("rating_" + x));
+
+                            if (task.getResult().get("product_id_" + x).toString().equals(productID)) {
+                                ProductDetailsActivity.initialRating = Integer.parseInt(String.valueOf((long) task.getResult().get("rating_" + x))) - 1;
+                                if (ProductDetailsActivity.rateNowContainer !=null) {
+                                    ProductDetailsActivity.setRating(initialRating);
+                                }
+                            }
+
+
+                        }
+
+                    } else {
+                        String error = task.getException().getMessage();
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                    }
+                    ProductDetailsActivity.running_ratingquery=false;
+
+
+                }
+            });
+        }
+
+  }
+
+
 
     public  static void clearData(){
         categoryModelList.clear();

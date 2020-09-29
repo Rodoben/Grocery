@@ -65,21 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
-/*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser curentUser = firebaseAuth.getCurrentUser();
-        if (curentUser == null) {
-            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-            startActivity(i);
-            finish();
-        } else {
-            Intent ii = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(ii);
-            finish();
-        }
-    }*/
+
 }
 
 
