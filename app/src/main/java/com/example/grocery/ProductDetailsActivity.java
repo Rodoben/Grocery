@@ -105,6 +105,7 @@ private TextView totalRatingsFigure;
 
 
  public static boolean ALREADY_ADDED_TO_WISHLIST = false;
+    public static boolean ALREADY_ADDED_TO_CARTLIST = false;
  public static FloatingActionButton addToWishListBtn;
 
  private FirebaseFirestore firebaseFirestore;
