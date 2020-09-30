@@ -87,6 +87,7 @@ private  ConstraintLayout productDetailsTabContainer;
 
 
     private DocumentSnapshot documentSnapshot;
+   public static MenuItem cartItem;
 
  ///////// rating layout
    public static LinearLayout rateNowContainer;
@@ -258,16 +259,11 @@ private TextView totalRatingsFigure;
                             DBqueries.loadWishList(ProductDetailsActivity.this,loadingDialog,false);
 
                         }
-
                         else {
                             loadingDialog.dismiss();
                         }
                       }
-
-
                       else {
-
-
                           loadingDialog.dismiss();
                       }
 
@@ -334,10 +330,7 @@ private TextView totalRatingsFigure;
                             public void onComplete(@NonNull Task<Void> task) {
 
                                 if (task.isSuccessful()) {
-
-
-
-                                                if (DBqueries.wishListModelList.size() != 0) {
+                                    if (DBqueries.wishListModelList.size() != 0) {
                                                     DBqueries.wishListModelList.add(new WishListModel(productID, documentSnapshot.get("product_image_1").toString()
                                                             , documentSnapshot.get("product_title").toString()
                                                             , (long) documentSnapshot.get("free_coupens")
@@ -570,8 +563,6 @@ private TextView totalRatingsFigure;
                   if (currentUser == null){
                       signInDialog.show();
                   }else {
-                   //// todo add to cart
-
                       if (!running_cartQuery){
                           running_cartQuery = true;
 
@@ -589,29 +580,24 @@ private TextView totalRatingsFigure;
                                   public void onComplete(@NonNull Task<Void> task) {
 
                                       if (task.isSuccessful()) {
-
-
-
-                                                      if (DBqueries.cartitemModelList.size() != 0) {
+                                          if (DBqueries.cartitemModelList.size() != 0) {
                                                           DBqueries.cartitemModelList.add(new CartitemModel(CartitemModel.CART_ITEM,productID,documentSnapshot.get("product_image_1").toString()
                                                                   , documentSnapshot.get("product_title").toString()
                                                                   , (long) documentSnapshot.get("free_coupens")
                                                                   , documentSnapshot.get("product_price").toString()
                                                                   , documentSnapshot.get("cutted_price").toString()
-                                                                  , (long)1
-                                                                  , (long)0
-                                                                  , (long)0));
+                                                                  , (long) 1
+                                                                  , (long) 0
+                                                                  , (long) 0));
                                                       }
-
-
-
 
                                                       ALREADY_ADDED_TO_CARTLIST = true;
 
                                                       DBqueries.cartList.add(productID);
 
-                                          Toast.makeText(ProductDetailsActivity.this, "Already to Cart", Toast.LENGTH_LONG).show();
+                                          Toast.makeText(ProductDetailsActivity.this, "Added to Cart successfully", Toast.LENGTH_LONG).show();
                                                   // addToWishListBtn.setEnabled(true);
+                                          invalidateOptionsMenu();
                                                   running_cartQuery = false;
 
                                               }
@@ -823,6 +809,42 @@ private TextView totalRatingsFigure;
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.search_and_cart_icon, menu);
+
+         cartItem = menu.findItem(R.id.main_cart_icon);
+        if (DBqueries.cartList.size()>0){
+
+            cartItem.setActionView(R.layout.badge_layout);
+            ImageView badgeIcon = cartItem.getActionView().findViewById(R.id.badge_icon);
+            badgeIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
+
+
+            TextView badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
+
+             if (DBqueries.cartList.size()<99){
+                 badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
+             }else {
+                 badgeCount.setText("99");
+             }
+            cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentUser == null){
+                        signInDialog.show();
+                    }else {
+
+
+                        Intent cartIntent = new Intent(ProductDetailsActivity.this, MainActivity.class);
+                        showCart = true;
+                        startActivity(cartIntent);
+
+                    }
+
+                }
+            });
+        }else {
+            cartItem.setActionView(null);
+        }
+
         return true;
     }
     @Override
