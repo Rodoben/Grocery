@@ -310,7 +310,7 @@ public class DBqueries {
 
   }
 
-  public static void loadCartList(final Context context,final boolean loadProductData){
+  public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData){
 
       cartList.clear();
       firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_CART")
@@ -345,7 +345,7 @@ public class DBqueries {
                                               , (long)0
                                               , (long)0));
 
-                                      MyWishListFragment.wishListAdapter.notifyDataSetChanged();
+                                    //check here  MyCartFragment.cartAdapter.notifyDataSetChanged();
 
 
                                   } else {

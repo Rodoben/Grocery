@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,6 +21,8 @@ public class MyCartFragment extends Fragment {
 
     private RecyclerView cartItemsRecyclerView;
     private Button continueBtn;
+    private Dialog loadingDialog;
+    public static CartAdapter cartAdapter;
 
     public MyCartFragment() {
         // Required empty public constructor
@@ -34,19 +37,40 @@ public class MyCartFragment extends Fragment {
        cartItemsRecyclerView =view.findViewById(R.id.cart_items_recyclerView);
        continueBtn = view.findViewById(R.id.cart_continue_btn);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        loadingDialog = new Dialog(getContext());
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
+
+
+
+       LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemsRecyclerView.setLayoutManager(layoutManager);
 
-        List<CartitemModel> cartitemModelList = new ArrayList<>();
-        cartitemModelList.add(new CartitemModel(0,R.drawable.banner,"PIXEL 2",2,"Rs.5000/-","Rs.6000/-",1,0,0));
-        cartitemModelList.add(new CartitemModel(0,R.drawable.banner,"PIXEL 2",0,"Rs.5000/-","Rs.6000/-",1,1,0));
-        cartitemModelList.add(new CartitemModel(0,R.drawable.banner,"PIXEL 2",2,"Rs.5000/-","Rs.6000/-",1,2,0));
-        cartitemModelList.add(new CartitemModel(1,"Price (3 items)","Rs.356654/-","free","Rs550000/-","Rs.500/-"));
+        if (DBqueries.cartitemModelList.size() == 0){
+            DBqueries.cartList.clear();
+            DBqueries.loadCartList(getContext(),loadingDialog,true);
+        }
+        else {
+            loadingDialog.dismiss();
+        }
 
-        CartAdapter cartAdapter = new CartAdapter(cartitemModelList);
+        //List<CartitemModel> cartitemModelList = new ArrayList<>();
+
+       // cartitemModelList.add(new CartitemModel(1,"Price (3 items)","Rs.356654/-","free","Rs550000/-","Rs.500/-"));
+
+        CartAdapter cartAdapter = new CartAdapter(DBqueries.cartitemModelList);
         cartItemsRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
+
+
+
+
+
           continueBtn.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View view) {
