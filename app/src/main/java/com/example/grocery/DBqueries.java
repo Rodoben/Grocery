@@ -2,8 +2,12 @@ package com.example.grocery;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +38,8 @@ import static com.example.grocery.ProductDetailsActivity.setRating;
 
 public class DBqueries {
 
+   // public static boolean addressselected = false;
+
   //  public static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
   //  public static FirebaseUser currentUser = firebaseAuth.getCurrentUser();
    public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -44,6 +50,10 @@ public class DBqueries {
     public  static List <String> loadedCategoriesnames = new ArrayList<>();
     public static List<String> wishList = new ArrayList<>();
     public static List<WishListModel> wishListModelList = new ArrayList<>();
+
+    public static List<AddressesModel> addressesModelList = new ArrayList<>();
+   public static  int selectedAddress = -1;
+
 
     public static  List<String> myRatedIds = new ArrayList<>();
     public static List<Long> myRating = new ArrayList<>();
@@ -311,7 +321,7 @@ public class DBqueries {
 
   }
 
-  public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData){
+  public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData, final TextView badgeCount,final TextView cartTotalAmount){
 
       cartList.clear();
       firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_CART")
@@ -337,14 +347,31 @@ public class DBqueries {
                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                                   if (task.isSuccessful()) {
-                                      cartitemModelList.add(new CartitemModel(CartitemModel.CART_ITEM,productId,task.getResult().get("product_image_1").toString()
+                                      int index = 0;
+
+                                      if (cartList.size()>=2){
+                                          index = cartList.size()-2;
+                                      }
+                                      cartitemModelList.add(index,new CartitemModel(CartitemModel.CART_ITEM,productId,task.getResult().get("product_image_1").toString()
                                               , task.getResult().get("product_title").toString()
                                               , (long) task.getResult().get("free_coupens")
                                               , task.getResult().get("product_price").toString()
                                               , task.getResult().get("cutted_price").toString()
                                               , (long)1
                                               , (long)0
-                                              , (long)0));
+                                              , (long)0
+                                              ,(boolean)task.getResult().get("in_stock")));
+
+                                      if (cartList.size() == 1){
+
+                                          cartitemModelList.add(new CartitemModel(CartitemModel.TOTAL_AMOUNT));
+                                          LinearLayout parent = (LinearLayout)cartTotalAmount.getParent().getParent();
+                                      }
+                                      if (cartList.size() == 0){
+
+                                          cartitemModelList.clear();
+
+                                      }
 
                                    MyCartFragment.cartAdapter.notifyDataSetChanged();
 
@@ -362,8 +389,22 @@ public class DBqueries {
 
 
                   }
+                  if (cartList.size()!=0){
+                      badgeCount.setVisibility(View.VISIBLE);
+                  }else {
+                      badgeCount.setVisibility(View.INVISIBLE);
+                  }
 
-              }else {
+                  if (DBqueries.cartList.size()<99){
+                      badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
+                  }else {
+                      badgeCount.setText("99");
+                  }
+
+              }
+
+
+              else {
                   String error = task.getException().getMessage();
                   Toast.makeText(context,error,Toast.LENGTH_LONG).show();
 
@@ -376,7 +417,7 @@ public class DBqueries {
 
   }
 
-    public  static  void removeFromCart(final int index, final Context context){
+    public  static  void removeFromCart(final int index, final Context context,final TextView cartTotalAmount){
         final String removedProductId = cartList.get(index);
         cartList.remove(index);
         Map<String,Object> updateCartList = new HashMap<>();
@@ -397,10 +438,13 @@ public class DBqueries {
                                 cartitemModelList.remove(index);
                                 MyCartFragment.cartAdapter.notifyDataSetChanged();
                             }
-
-                            if (ProductDetailsActivity.cartItem!=null) {
-                                ProductDetailsActivity.cartItem.setActionView(null);
+                            if (cartList.size() == 0){
+                                LinearLayout parent =(LinearLayout)cartTotalAmount.getParent().getParent();
+                                parent.setVisibility(View.GONE);
+                                cartitemModelList.clear();
                             }
+
+
                             Toast.makeText(context,"Removed Successfully",Toast.LENGTH_LONG).show();
 
                         }else {
@@ -418,12 +462,59 @@ public class DBqueries {
                 });
     }
 
+    public static  void loadAddresses(final Context context, final Dialog loadingDialog){
+            addressesModelList.clear();
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_ADDRESSES")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                if (task.isSuccessful()){
+
+                    Intent deliveryIntent;
+                    if ((long) task.getResult().get("list_size") == 0){
+                         deliveryIntent = new Intent(context,AddAddressActivity.class);
+                         deliveryIntent.putExtra("INTENT","deliveryIntent");
+
+                    }else {
+                        for (long x = 1;x<(long)task.getResult().get("list_size")+1;x++){
+                            addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
+                                    task.getResult().get("address_"+x).toString(),
+                                    task.getResult().get("pincode_"+x).toString(),
+                                    (boolean)task.getResult().get("selected_"+x)));
+
+                            if ((boolean)task.getResult().get("selected_"+x)){
+                                selectedAddress = Integer.parseInt(String.valueOf(x-1));
+                            }
+                        }
+
+                         deliveryIntent = new Intent(context,DeliveryActivity.class);
+
+
+                    }
+                    context.startActivity(deliveryIntent);
+
+
+                }else {
+                    String error = task.getException().getMessage();
+                    Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+
+                }
+                loadingDialog.dismiss();
+
+            }
+        });
+
+    }
+
     public  static void clearData(){
         categoryModelList.clear();
         lists.clear();
         loadedCategoriesnames.clear();
         wishList.clear();
         wishListModelList.clear();
+        cartList.clear();
+        cartitemModelList.clear();
     }
 
 

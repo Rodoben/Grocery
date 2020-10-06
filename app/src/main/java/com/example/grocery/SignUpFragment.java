@@ -210,16 +210,20 @@ cnfpass.addTextChangedListener(new TextWatcher() {
 
                                   Map<String,Object> cartMap= new HashMap<>();
                                   cartMap.put("list_size", (long) 0);
+                                  Map<String,Object> myAddressesMap= new HashMap<>();
+                                  myAddressesMap.put("list_size", (long) 0);
 
                                   final List<String> documentNames = new ArrayList<>();
                                   documentNames.add("MY_WISHLIST");
                                   documentNames.add("MY_RATINGS");
                                   documentNames.add("MY_CART");
+                                  documentNames.add("MY_ADDRESSES");
 
                                   List<Map<String,Object>> documentFields = new ArrayList<>();
                                   documentFields.add(wishListMap);
                                   documentFields.add(ratingsMap);
                                   documentFields.add(cartMap);
+                                  documentFields.add(myAddressesMap);
 
 
 

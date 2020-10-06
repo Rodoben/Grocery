@@ -23,35 +23,37 @@
         android:id="@+id/linearLayout6"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:orientation="horizontal"
         android:background="#ffffff"
         android:elevation="8dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
-            android:paddingStart="16dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:paddingStart="16dp">
+
             <TextView
                 android:id="@+id/total_cart_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rs. 49999"
-                android:textStyle="bold"
+                android:text="Rs. 499999/-"
+                android:textColor="#000000"
                 android:textSize="20sp"
-                android:textColor="#000000"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Amount"
                 android:textColor="#000000"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -59,12 +61,12 @@
             android:id="@+id/cart_continue_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             android:layout_weight="1"
-            android:textStyle="bold"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
             android:text="Proceed"
-            android:textSize="16sp"
             android:textColor="#ffffff"
-            android:backgroundTint="@color/colorAccent"/>
-        
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
