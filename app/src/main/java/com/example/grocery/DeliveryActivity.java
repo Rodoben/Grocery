@@ -105,7 +105,8 @@ public class DeliveryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         paymentmethodDialog.dismiss();
-                        loadingDialog.show();
+                       // loadingDialog.show();
+
                         if (ContextCompat.checkSelfPermission(DeliveryActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(DeliveryActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 101);
 
