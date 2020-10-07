@@ -635,7 +635,6 @@ private TextView totalRatingsFigure;
                 }else {
 
                     DeliveryActivity.cartitemModelList = new ArrayList<>();
-
                     DeliveryActivity.cartitemModelList.add(new CartitemModel(CartitemModel.CART_ITEM,productID,documentSnapshot.get("product_image_1").toString()
                             , documentSnapshot.get("product_title").toString()
                             , (long) documentSnapshot.get("free_coupens")
