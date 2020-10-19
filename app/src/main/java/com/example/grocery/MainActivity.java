@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser currentUser;
     private TextView badgeCount;
 
+    public static Activity mainActivity;
+
     public static boolean showCart=false;
     private int currentFragment=-1;
   private   NavigationView navigationView;
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         frameLayout = findViewById(R.id.main_framelayout);
 
         if (showCart) {
+            mainActivity  = this;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             gotoFragment("My Cart", new MyCartFragment(), -2);
@@ -220,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
 
                 if (showCart) {
+                    mainActivity = null;
                        showCart=false;
                        finish();
                 } else {
@@ -256,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if (id == android.R.id.home){
             if (showCart){
+                mainActivity = null;
                 showCart=false;
                 finish();
             }

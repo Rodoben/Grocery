@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -88,7 +89,7 @@ private  ConstraintLayout productDetailsTabContainer;
 
     private DocumentSnapshot documentSnapshot;
    public static MenuItem cartItem;
-
+public static Activity productDetailsActivity;
  ///////// rating layout
    public static LinearLayout rateNowContainer;
 private TextView totalRatingsFigure;
@@ -629,11 +630,12 @@ private TextView totalRatingsFigure;
         buyNowbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadingDialog.show();
+
                 if (currentUser == null){
                     signInDialog.show();
                 }else {
-
+                    loadingDialog.show();
+                    productDetailsActivity = ProductDetailsActivity.this;
                     DeliveryActivity.cartitemModelList = new ArrayList<>();
                     DeliveryActivity.cartitemModelList.add(new CartitemModel(CartitemModel.CART_ITEM,productID,documentSnapshot.get("product_image_1").toString()
                             , documentSnapshot.get("product_title").toString()
@@ -911,9 +913,16 @@ private TextView totalRatingsFigure;
             return true;
 
         }else if(id == android.R.id.home){
+            productDetailsActivity = null;
            finish();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        productDetailsActivity = null;
+        super.onBackPressed();
     }
 }
