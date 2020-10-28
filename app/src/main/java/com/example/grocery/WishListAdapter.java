@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,8 +53,8 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
       String productPrice = wishListModelList.get(position).getProductPrice();
       String cuttedPrice = wishListModelList.get(position).getCuttedPrice();
       boolean COD = wishListModelList.get(position).getCOD();
-
-        holder.setData(productId,resource,title,freeCoupens,rating,totalRatings,productPrice,cuttedPrice,COD,position);
+                 boolean inStock = wishListModelList.get(position).isInStock();
+        holder.setData(productId,resource,title,freeCoupens,rating,totalRatings,productPrice,cuttedPrice,COD,position,inStock);
         if (lastPosition < position) {
 
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in);
@@ -99,12 +100,14 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
             paymentMethod = itemView.findViewById(R.id.payment_method);
             deleteBtn = itemView.findViewById(R.id.delete_button);
         }
-        private void setData(final String productId, String resource, String title, long freeCoupensNo, String averageRate, long totalRatingsNo, String price, String cuttedPriceValue, boolean cod, final int index){
+        private void setData(final String productId, String resource, String title, long freeCoupensNo, String averageRate, long totalRatingsNo, String price, String cuttedPriceValue, boolean cod, final int index,boolean inStock){
 
 
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.placeholder)).into(productImage);
             productTitle.setText(title);
-            if (freeCoupensNo!=0) {
+
+
+            if (freeCoupensNo!=0 && inStock) {
           coupenIcon.setVisibility(View.VISIBLE);
                 if (freeCoupensNo == 1) {
 
@@ -117,16 +120,40 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
                 freeCoupens.setVisibility(View.INVISIBLE);
 
             }
-            rating.setText(averageRate);
-            totalRaings.setText("("+totalRatingsNo+"ratings)");
-            productPrice.setText("Rs."+price+"/-");
-            cuttedPrice.setText("Rs."+cuttedPriceValue+"/-");
-            if (cod){
-                paymentMethod.setVisibility(View.VISIBLE);
+            LinearLayout linearLayout =(LinearLayout)rating.getParent();
+            if (inStock){
+                rating.setVisibility(View.VISIBLE);
+                totalRaings.setVisibility(View.VISIBLE);
+
+                productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.green));
+                cuttedPrice.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                rating.setText(averageRate);
+                totalRaings.setText("("+totalRatingsNo+"ratings)");
+                productPrice.setText("Rs."+price+"/-");
+                cuttedPrice.setText("Rs."+cuttedPriceValue+"/-");
+                if (cod){
+                    paymentMethod.setVisibility(View.VISIBLE);
+
+                }else {
+                    paymentMethod.setVisibility(View.INVISIBLE);
+                }
+
 
             }else {
+
+                linearLayout.setVisibility(View.INVISIBLE);
+                rating.setVisibility(View.INVISIBLE);
+                totalRaings.setVisibility(View.INVISIBLE);
+                productPrice.setText("OUT OF STOCK");
+                productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+                cuttedPrice.setVisibility(View.INVISIBLE);
                 paymentMethod.setVisibility(View.INVISIBLE);
+
+
             }
+
+
 
             if (wishlist){
                 deleteBtn.setVisibility(View.VISIBLE);

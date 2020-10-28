@@ -2,14 +2,23 @@ package com.example.grocery;
 
 public class AddressesModel {
 
-    private String fullname,addess,pincode;
+    private String fullname,addess,pincode,mobileno;
     private boolean selected;
 
-    public AddressesModel(String fullname, String addess, String pincode,boolean selected) {
+    public AddressesModel(String fullname, String addess, String pincode,boolean selected,String mobileno) {
         this.fullname = fullname;
         this.addess = addess;
         this.pincode = pincode;
         this.selected=selected;
+        this.mobileno = mobileno;
+    }
+
+    public String getMobileno() {
+        return mobileno;
+    }
+
+    public void setMobileno(String mobileno) {
+        this.mobileno = mobileno;
     }
 
     public String getFullname() {

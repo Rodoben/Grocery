@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ThrowOnExtraProperties;
@@ -129,7 +130,8 @@ public class DBqueries {
                                                 ,(long)documentSnapshot.get("total_ratings_"+x)
                                                 ,documentSnapshot.get("product_price_"+x).toString()
                                                 ,documentSnapshot.get("cutted_price_"+x).toString()
-                                                ,(boolean)documentSnapshot.get("COD_"+x) ));
+                                                ,(boolean)documentSnapshot.get("COD_"+x)
+                                                ,(boolean)documentSnapshot.get("in_stock_"+x)));
 
 
                                     }
@@ -200,16 +202,48 @@ public class DBqueries {
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                                     if (task.isSuccessful()) {
-                                        wishListModelList.add(new WishListModel(productId,task.getResult().get("product_image_1").toString()
-                                                , task.getResult().get("product_title").toString()
-                                                , (long) task.getResult().get("free_coupens")
-                                                , task.getResult().get("average_rating").toString()
-                                                , (long) task.getResult().get("total_ratings")
-                                                , task.getResult().get("product_price").toString()
-                                                , task.getResult().get("cutted_price").toString()
-                                                , (boolean) task.getResult().get("COD")));
+                                        final DocumentSnapshot documentSnapshot = task.getResult();
+                                        FirebaseFirestore.getInstance().collection("PRODUCTS").document(productId).collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING).get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                                                 MyWishListFragment.wishListAdapter.notifyDataSetChanged();
+                                                        if (task.isSuccessful()) {
+
+
+                                                            if (task.getResult().getDocuments().size() < (long)documentSnapshot.get("stock_quantity")) {
+                                                               // firebaseFirestore.collection("PRODUCTS").document(cartitemModelList.get(finalX).getProductID()).update("in_stock", true);
+                                                                wishListModelList.add(new WishListModel(productId,documentSnapshot.get("product_image_1").toString()
+                                                                        , documentSnapshot.get("product_title").toString()
+                                                                        , (long) documentSnapshot.get("free_coupens")
+                                                                        , documentSnapshot.get("average_rating").toString()
+                                                                        , (long) documentSnapshot.get("total_ratings")
+                                                                        , documentSnapshot.get("product_price").toString()
+                                                                        , documentSnapshot.get("cutted_price").toString()
+                                                                        , (boolean) documentSnapshot.get("COD")
+                                                                        ,true));
+
+                                                            }else {
+                                                                wishListModelList.add(new WishListModel(productId,documentSnapshot.get("product_image_1").toString()
+                                                                        , documentSnapshot.get("product_title").toString()
+                                                                        , (long) documentSnapshot.get("free_coupens")
+                                                                        , documentSnapshot.get("average_rating").toString()
+                                                                        , (long) documentSnapshot.get("total_ratings")
+                                                                        , documentSnapshot.get("product_price").toString()
+                                                                        , documentSnapshot.get("cutted_price").toString()
+                                                                        , (boolean) documentSnapshot.get("COD")
+                                                                        ,false));
+                                                            }
+                                                            MyWishListFragment.wishListAdapter.notifyDataSetChanged();
+                                                        } else {
+
+                                                            String error = task.getException().getMessage();
+                                                            Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                                                        }
+
+                                                    }
+                                                });
+
 
 
                                     } else {
@@ -347,34 +381,71 @@ public class DBqueries {
                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                                   if (task.isSuccessful()) {
-                                      int index = 0;
 
-                                      if (cartList.size()>=2){
-                                          index = cartList.size()-2;
-                                      }
-                                      cartitemModelList.add(index,new CartitemModel(CartitemModel.CART_ITEM,productId,task.getResult().get("product_image_1").toString()
-                                              , task.getResult().get("product_title").toString()
-                                              , (long) task.getResult().get("free_coupens")
-                                              , task.getResult().get("product_price").toString()
-                                              , task.getResult().get("cutted_price").toString()
-                                              , (long)1
-                                              , (long)0
-                                              , (long)0
-                                              ,(boolean)task.getResult().get("in_stock")));
 
-                                      if (cartList.size() == 1){
 
-                                          cartitemModelList.add(new CartitemModel(CartitemModel.TOTAL_AMOUNT));
-                                          LinearLayout parent = (LinearLayout)cartTotalAmount.getParent().getParent();
-                                      }
-                                      if (cartList.size() == 0){
+                                      final DocumentSnapshot documentSnapshot = task.getResult();
+                                      FirebaseFirestore.getInstance().collection("PRODUCTS").document(productId).collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING).get()
+                                              .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                  @Override
+                                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                                          cartitemModelList.clear();
+                                                      if (task.isSuccessful()) {
 
-                                      }
+                                                          int index = 0;
 
-                                   MyCartFragment.cartAdapter.notifyDataSetChanged();
+                                                          if (cartList.size()>=2){
+                                                              index = cartList.size()-2;
+                                                          }
+                                                          if (task.getResult().getDocuments().size() < (long)documentSnapshot.get("stock_quantity")) {
+                                                              // firebaseFirestore.collection("PRODUCTS").document(cartitemModelList.get(finalX).getProductID()).update("in_stock", true);
+                                                              cartitemModelList.add(index,new CartitemModel(CartitemModel.CART_ITEM,productId,documentSnapshot.get("product_image_1").toString()
+                                                                      , documentSnapshot.get("product_title").toString()
+                                                                      , (long) documentSnapshot.get("free_coupens")
+                                                                      , documentSnapshot.get("product_price").toString()
+                                                                      , documentSnapshot.get("cutted_price").toString()
+                                                                      , (long)1
+                                                                      , (long)0
+                                                                      , (long)0
+                                                                      ,true
+                                                                      ,(long)documentSnapshot.get("max_quantity")
+                                                                      ,(long)documentSnapshot.get("stock_quantity")));
 
+                                                          }else {
+                                                              cartitemModelList.add(index,new CartitemModel(CartitemModel.CART_ITEM,productId,documentSnapshot.get("product_image_1").toString()
+                                                                      , documentSnapshot.get("product_title").toString()
+                                                                      , (long) documentSnapshot.get("free_coupens")
+                                                                      , documentSnapshot.get("product_price").toString()
+                                                                      , documentSnapshot.get("cutted_price").toString()
+                                                                      , (long)1
+                                                                      , (long)0
+                                                                      , (long)0
+                                                                      ,false
+                                                                      ,(long)documentSnapshot.get("max_quantity")
+                                                                      ,(long)documentSnapshot.get("stock_quantity")));
+                                                          }
+
+                                                          if (cartList.size() == 1){
+
+                                                              cartitemModelList.add(new CartitemModel(CartitemModel.TOTAL_AMOUNT));
+                                                              LinearLayout parent = (LinearLayout)cartTotalAmount.getParent().getParent();
+                                                          }
+                                                          if (cartList.size() == 0){
+
+                                                              cartitemModelList.clear();
+
+                                                          }
+
+                                                          MyCartFragment.cartAdapter.notifyDataSetChanged();
+
+                                                      } else {
+
+                                                          String error = task.getException().getMessage();
+                                                          Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                                                      }
+
+                                                  }
+                                              });
 
                                   } else {
                                       String error = task.getException().getMessage();
@@ -386,8 +457,6 @@ public class DBqueries {
                           });
 
                       }
-
-
                   }
                   if (cartList.size()!=0){
                       badgeCount.setVisibility(View.VISIBLE);
@@ -481,7 +550,8 @@ public class DBqueries {
                             addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
                                     task.getResult().get("address_"+x).toString(),
                                     task.getResult().get("pincode_"+x).toString(),
-                                    (boolean)task.getResult().get("selected_"+x)));
+                                    (boolean)task.getResult().get("selected_"+x),
+                                    task.getResult().getString("mobile_no_"+x)));
 
                             if ((boolean)task.getResult().get("selected_"+x)){
                                 selectedAddress = Integer.parseInt(String.valueOf(x-1));
@@ -515,6 +585,10 @@ public class DBqueries {
         wishListModelList.clear();
         cartList.clear();
         cartitemModelList.clear();
+        myRatedIds.clear();
+        myRating.clear();
+        addressesModelList.clear();
+
     }
 
 

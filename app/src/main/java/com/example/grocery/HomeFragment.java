@@ -219,9 +219,11 @@ retryBtn.setOnClickListener(new View.OnClickListener() {
         networkInfo = connectivityManager.getActiveNetworkInfo();
 
 
-        categoryModelList.clear();
-        lists.clear();
-        loadedCategoriesnames.clear();
+      //  categoryModelList.clear();
+      //  lists.clear();
+      //  loadedCategoriesnames.clear();
+        DBqueries.clearData();
+
         if (networkInfo != null && networkInfo.isConnected()==true) {
             MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             noInternetConnection.setVisibility(View.GONE);

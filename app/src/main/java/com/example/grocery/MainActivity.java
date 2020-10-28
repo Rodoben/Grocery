@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView badgeCount;
 
     public static Activity mainActivity;
+    public  static  boolean resetMainActivity = false;
 
     public static boolean showCart=false;
     private int currentFragment=-1;
@@ -156,6 +157,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
         }
+if (resetMainActivity){
+
+    resetMainActivity = false;
+    actionBarLogo.setVisibility(View.VISIBLE);
+    setFragment(new HomeFragment(),HOME_FRAGMENT);
+    navigationView.getMenu().getItem(0).setChecked(true);
+}
+
         invalidateOptionsMenu();
 
 
