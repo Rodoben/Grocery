@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.ThrowOnExtraProperties;
 import com.google.gson.internal.$Gson$Preconditions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +60,11 @@ public class DBqueries {
 
     public static  List<String> myRatedIds = new ArrayList<>();
     public static List<Long> myRating = new ArrayList<>();
+
+
+    public  static  List<RewardModel> rewardModelList = new ArrayList<>();
+
+
 
     public static void loadCategories(final RecyclerView categoryRecyclerView, final Context context){
            categoryModelList.clear();
@@ -577,6 +584,74 @@ public class DBqueries {
 
     }
 
+public  static  void loadRewards(final Context context, final Dialog loadingDialog, final boolean onRewardFragment){
+        rewardModelList.clear();
+    firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).get()
+            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                    if (task.isSuccessful()){
+                      final   Date lastseenDate= task.getResult().getDate("Last Seen");
+                        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_REWARDS").get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()){
+                                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                                if (documentSnapshot.get("type").toString().equals("Discount") && lastseenDate.before(documentSnapshot.getDate("validity")))
+                                                {
+                                                    rewardModelList.add(new RewardModel(documentSnapshot.get("type").toString()
+                                                            ,documentSnapshot.get("lower_limit").toString()
+                                                            ,documentSnapshot.get("upper_limit").toString()
+                                                            ,documentSnapshot.get("percentage").toString()
+                                                            ,documentSnapshot.get("body").toString()
+                                                            , (Date) documentSnapshot.getTimestamp("validity").toDate()
+                                                    ));
+                                                }else if (documentSnapshot.get("type").toString().equals("Flat Rs.*OFF") && lastseenDate.before(documentSnapshot.getDate("validity")))
+                                                    {
+
+                                                    rewardModelList.add(new RewardModel(documentSnapshot.get("type").toString()
+                                                            ,documentSnapshot.get("lower_limit").toString()
+                                                            ,documentSnapshot.get("upper_limit").toString()
+                                                            ,documentSnapshot.get("amount").toString()
+                                                            ,documentSnapshot.get("body").toString()
+                                                            , (Date) documentSnapshot.getTimestamp("validity").toDate()
+                                                    ));
+
+                                                }
+
+
+                                            }
+
+                                            if (onRewardFragment){
+                                                MyRewardsFragment.myRewardsAdapter.notifyDataSetChanged();
+                                            }
+
+
+
+                                        }else {
+                                            String error = task.getException().getMessage();
+                                            Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                                        }
+                                        loadingDialog.dismiss();
+                                    }
+                                });
+
+                    }else {
+                        loadingDialog.dismiss();
+                        String error = task.getException().getMessage();
+                        Toast.makeText(context,error,Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
+
+
+
+}
+
+
     public  static void clearData(){
         categoryModelList.clear();
         lists.clear();
@@ -588,6 +663,7 @@ public class DBqueries {
         myRatedIds.clear();
         myRating.clear();
         addressesModelList.clear();
+        rewardModelList.clear();
 
     }
 

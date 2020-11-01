@@ -33,12 +33,12 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public void onBindViewHolder(@NonNull HorizontalProductScrollAdapter.ViewHolder holder, int position) {
-     String resource = horizontalProductScrollModelList.get(position).getProduct_Image();
-     String title = horizontalProductScrollModelList.get(position).getProductTitle();
+        String resource = horizontalProductScrollModelList.get(position).getProduct_Image();
+        String title = horizontalProductScrollModelList.get(position).getProductTitle();
         String desc = horizontalProductScrollModelList.get(position).getProductDesc();
         String price = horizontalProductScrollModelList.get(position).getProductPrice();
-   String productId = horizontalProductScrollModelList.get(position).getProductId();
-    holder.setData(productId,resource,title,desc,price);
+        String productId = horizontalProductScrollModelList.get(position).getProductId();
+        holder.setData(productId,resource,title,desc,price);
     }
 
     @Override
