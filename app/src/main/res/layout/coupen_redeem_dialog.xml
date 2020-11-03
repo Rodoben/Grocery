@@ -43,13 +43,13 @@
         android:id="@+id/selected_coupen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/reward_gradient_background"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/reward_gradient_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coupen_recyclerView">
 
-<include layout="@layout/mini_rewards_item_layout"/>
+        <include layout="@layout/mini_rewards_item_layout" />
 
     </LinearLayout>
 
@@ -72,9 +72,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
-        android:textColor="#000000"
         android:text="original Price"
+        android:textColor="#000000"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageView17"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,15 +84,15 @@
         android:id="@+id/textView39"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
-        android:textColor="#000000"
-        android:textStyle="bold"
-
         android:text="Price after Coupen \nCoupen Redemption"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="12sp"
+
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView17"
         app:layout_constraintTop_toBottomOf="@+id/selected_coupen" />
@@ -129,17 +129,47 @@
         app:layout_constraintTop_toBottomOf="@+id/textView39" />
 
     <TextView
-        android:id="@+id/textView43"
+        android:id="@+id/footer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
         android:text="* terms and condition applied"
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/apply_or_remove_Btns_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/original_price" />
+
+    <LinearLayout
+        android:id="@+id/apply_or_remove_Btns_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/remove_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:stateListAnimator="@null"
+            android:text="Remove" />
+
+        <Button
+            android:id="@+id/apply_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:stateListAnimator="@null"
+
+            android:text="Apply" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -111,11 +111,17 @@ public class MyCartFragment extends Fragment {
     public void onStart() {
         super.onStart();
         cartAdapter.notifyDataSetChanged();
+        if (DBqueries.rewardModelList.size() == 0){
+            loadingDialog.show();
+            DBqueries.loadRewards(getContext(),loadingDialog,false);
+        }
+
+
+
         if (DBqueries.cartitemModelList.size() == 0){
-
             DBqueries.cartList.clear();
-
             DBqueries.loadCartList(getContext(),loadingDialog,true, new TextView(getContext()),totalAmount);
+
         }
         else {
             if (DBqueries.cartitemModelList.get(DBqueries.cartitemModelList.size()-1).getType() == CartitemModel.TOTAL_AMOUNT){

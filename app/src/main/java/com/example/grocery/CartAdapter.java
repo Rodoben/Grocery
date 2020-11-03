@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -154,7 +155,27 @@ private boolean showDeleteBtn;
         private ImageView productImage,freeCoupensIcon;
         private TextView productTitle,freeCoupens,productPrice,cuttedPrice,offersApplied,coupensApplied,productQuantity;
         private LinearLayout deleteBtn;
+        private Button redeemBtn;
         private LinearLayout coupenRedemtionLayout;
+        private TextView coupenRedemptionBody;
+
+        ///////////coupenDialog
+        private TextView coupenTitle;
+        private TextView coupenExpiryDate;
+        private TextView coupenBody;
+        private RecyclerView coupensRecyclerView;
+        private LinearLayout selectedCoupen;
+        private TextView discountedPrice;
+        private TextView originalPrice;
+
+        private Button removeCoupenBtn;
+        private  Button applyCoupenBtn;
+        private LinearLayout applyORremoveBtnContainer;
+        private TextView footerText;
+        private String productOriginalPrice;
+        //////////coupen Dialog
+
+
 
         public CartItemViewholder(@NonNull View itemView) {
             super(itemView);
@@ -167,11 +188,12 @@ private boolean showDeleteBtn;
             offersApplied = itemView.findViewById(R.id.offers_applied);
             coupensApplied = itemView.findViewById(R.id.coupens_applied);
             productQuantity = itemView.findViewById(R.id.product_quantity);
-
+          coupenRedemptionBody = itemView.findViewById(R.id.tv_coupen_redemption);
           coupenRedemtionLayout = itemView.findViewById(R.id.coupen_redemption_layout);
+            redeemBtn = itemView.findViewById(R.id.coupen_redemption_btn);
             deleteBtn = itemView.findViewById(R.id.remove_item_btn);
         }
-        private void setItemDetails(final String productID, String resource, String title, long freeCoupensNo, String productPriceText, String cuttedPriceText, long offersAppliedNo, final int position, final boolean inStock, final String quantity, final long maxQuantity, boolean quantityError, final List<String> qtyIds, final long stockQty) {
+        private void setItemDetails(final String productID, String resource, String title, long freeCoupensNo, final String productPriceText, String cuttedPriceText, long offersAppliedNo, final int position, final boolean inStock, final String quantity, final long maxQuantity, boolean quantityError, final List<String> qtyIds, final long stockQty) {
            // productImage.setImageResource(resource);
 
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.placeholder)).into(productImage);
@@ -364,7 +386,9 @@ private boolean showDeleteBtn;
                 });
                 if (offersAppliedNo>0){
                     offersApplied.setVisibility(View.VISIBLE);
-                    offersApplied.setText(offersAppliedNo+" Offers Applied");
+                    String offerDiscountedAmount = String.valueOf(Long.valueOf(cuttedPriceText) - Long.valueOf(productPriceText));
+
+                    offersApplied.setText("Offer Applied - Rs."+offerDiscountedAmount+"/-");
                 }else {
                     offersApplied.setVisibility(View.INVISIBLE);
                 }
@@ -391,6 +415,111 @@ private boolean showDeleteBtn;
              deleteBtn.setVisibility(View.GONE);
          }
 
+
+////////////////coupen dialog
+            final Dialog checkCoupenPriceDalog = new Dialog(itemView.getContext());
+            checkCoupenPriceDalog.setContentView(R.layout.coupen_redeem_dialog);
+            checkCoupenPriceDalog.setCancelable(false);
+            checkCoupenPriceDalog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+            ImageView toggleRecyclerView = checkCoupenPriceDalog.findViewById(R.id.toogle_recyclerView);
+            coupensRecyclerView = checkCoupenPriceDalog.findViewById(R.id.coupen_recyclerView);
+            selectedCoupen = checkCoupenPriceDalog.findViewById(R.id.selected_coupen);
+            coupenTitle = checkCoupenPriceDalog.findViewById(R.id.coupen_title);
+            coupenExpiryDate = checkCoupenPriceDalog.findViewById(R.id.coupen_validity);
+            coupenBody = checkCoupenPriceDalog.findViewById(R.id.coupen_body);
+
+            originalPrice = checkCoupenPriceDalog.findViewById(R.id.original_price);
+            discountedPrice = checkCoupenPriceDalog.findViewById(R.id.discounted_price);
+            removeCoupenBtn =checkCoupenPriceDalog.findViewById(R.id.remove_Btn);
+            applyCoupenBtn = checkCoupenPriceDalog.findViewById(R.id.apply_Btn);
+            footerText = checkCoupenPriceDalog.findViewById(R.id.footer_text);
+            applyORremoveBtnContainer = checkCoupenPriceDalog.findViewById(R.id.apply_or_remove_Btns_container);
+            footerText.setVisibility(View.GONE);
+            applyORremoveBtnContainer.setVisibility(View.VISIBLE);
+
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(itemView.getContext());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            coupensRecyclerView.setLayoutManager(layoutManager);
+
+            ////for coupen dialog
+            originalPrice.setText(productPrice.getText());
+            productOriginalPrice = productPriceText;
+            MyRewardsAdapter myRewardsAdapter = new MyRewardsAdapter(position,DBqueries.rewardModelList,true,coupensRecyclerView,selectedCoupen,productOriginalPrice,coupenTitle,coupenExpiryDate,coupenBody,discountedPrice);
+            coupensRecyclerView.setAdapter(myRewardsAdapter);
+            myRewardsAdapter.notifyDataSetChanged();
+             applyCoupenBtn.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+               if (!TextUtils.isEmpty(DBqueries.cartitemModelList.get(position).getSelectedCoupenId())) {
+                   for (RewardModel rewardModel : DBqueries.rewardModelList) {
+                       if (rewardModel.getCoupenId().equals(DBqueries.cartitemModelList.get(position).getSelectedCoupenId())) {
+                           rewardModel.setAlreadyUsed(true);
+                           coupenRedemtionLayout.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.reward_gradient_background));
+                           coupenRedemptionBody.setText(rewardModel.getCoupenBody());
+                           redeemBtn.setText("Coupen");
+                       }
+                   }
+
+                  coupensApplied.setVisibility(View.VISIBLE);
+                   String offerDiscountedAmount = String.valueOf(Long.valueOf(productPriceText) - Long.valueOf(discountedPrice.getText().toString().substring(3,discountedPrice.getText().length()-2)));
+
+                   coupensApplied.setText("Coupen Applied - Rs. " + offerDiscountedAmount);
+                   checkCoupenPriceDalog.dismiss();
+
+               }
+
+                 }
+             });
+
+             removeCoupenBtn.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     for (RewardModel rewardModel: DBqueries.rewardModelList){
+                         if (rewardModel.getCoupenId().equals(DBqueries.cartitemModelList.get(position).getSelectedCoupenId())){
+                             rewardModel.setAlreadyUsed(false);
+                         }
+                     }
+                     coupenTitle.setText("Coupen");
+                     coupenExpiryDate.setText("validity");
+                     coupenBody.setText("Tap the icon on the top right corner to select your coupen.");
+                     coupensApplied.setVisibility(View.INVISIBLE);
+                     coupenRedemtionLayout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.green));
+                     coupenRedemptionBody.setText("Apply your coupen here");
+                     redeemBtn.setText("Redeem");
+                       DBqueries.cartitemModelList.get(position).setSelectedCoupenId(null);
+                     checkCoupenPriceDalog.dismiss();
+
+
+
+                 }
+             });
+
+
+            toggleRecyclerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDialogRecyclerView();
+                }
+            });
+
+
+//////////////////coupen dialog
+
+            redeemBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+
+                 checkCoupenPriceDalog.show();
+
+             }
+         });
+
+
+
+
          deleteBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -401,6 +530,18 @@ private boolean showDeleteBtn;
                  }
              }
          });
+
+        }
+
+        private void  showDialogRecyclerView(){
+            if (coupensRecyclerView.getVisibility() == View.GONE)
+            {
+                coupensRecyclerView.setVisibility(View.VISIBLE);
+                selectedCoupen.setVisibility(View.GONE);
+            }else {
+                coupensRecyclerView.setVisibility(View.GONE);
+                selectedCoupen.setVisibility(View.VISIBLE);
+            }
 
         }
     }

@@ -1,5 +1,6 @@
 package com.example.grocery;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,11 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
     private RecyclerView coupensRecyclerView;
     private LinearLayout selectedCoupen;
     private String productOriginalPrice;
-   private TextView coupenTitle;
-   private  TextView coupenExpiryDate;
-   private TextView coupenBody;
+   private TextView selectedcoupenTitle;
+   private  TextView selectedcoupenExpiryDate;
+   private TextView selectedcoupenBody;
    private TextView discountedPrice;
+   private  int cartItemPosition;
 
     public MyRewardsAdapter(List<RewardModel> rewardModelList, Boolean useminiLayout) {
         this.rewardModelList = rewardModelList;
@@ -39,9 +41,22 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
         this.coupensRecyclerView = coupensRecyclerView;
         this.selectedCoupen = selectedCoupen;
         this.productOriginalPrice = productOriginalPrice;
-        this.coupenTitle = coupenTitle;
-        this.coupenExpiryDate = coupenExpiryDate;
-        this.coupenBody = coupenBody;
+        this.selectedcoupenTitle = coupenTitle;
+        this.selectedcoupenExpiryDate = coupenExpiryDate;
+        this.selectedcoupenBody = coupenBody;
+        this.discountedPrice = discountedPrice;
+    }
+
+    public MyRewardsAdapter(int cartItemPosition, List<RewardModel> rewardModelList, Boolean useminiLayout, RecyclerView coupensRecyclerView, LinearLayout selectedCoupen, String productOriginalPrice, TextView coupenTitle, TextView coupenExpiryDate, TextView coupenBody,TextView discountedPrice) {
+       this.cartItemPosition=cartItemPosition;
+        this.rewardModelList = rewardModelList;
+        this.useminiLayout = useminiLayout;
+        this.coupensRecyclerView = coupensRecyclerView;
+        this.selectedCoupen = selectedCoupen;
+        this.productOriginalPrice = productOriginalPrice;
+        this.selectedcoupenTitle = coupenTitle;
+        this.selectedcoupenExpiryDate = coupenExpiryDate;
+        this.selectedcoupenBody = coupenBody;
         this.discountedPrice = discountedPrice;
     }
 
@@ -63,14 +78,15 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
+       String coupenId = rewardModelList.get(position).getCoupenId();
        String type=rewardModelList.get(position).getType();
        Date validity = rewardModelList.get(position).getTimestamp();
        String body = rewardModelList.get(position).getCoupenBody();
        String lowerLimit = rewardModelList.get(position).getLowerLimit();
        String upperLimit = rewardModelList.get(position).getUpperLimit();
        String discOramt = rewardModelList.get(position).getdiscORamt();
-
-       holder.setDate(type,validity,body,lowerLimit,upperLimit,discOramt);
+       Boolean alreadyUsed = rewardModelList.get(position).getAlreadyUsed();
+       holder.setData(coupenId,type,validity,body,lowerLimit,upperLimit,discOramt,alreadyUsed);
 
     }
 
@@ -91,7 +107,7 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
 
         }
 
-        private void setDate(final String type, final Date validity, final String body,  final String lowerLimit, final String upperLimit,final String  discORamt){
+        private void setData(final String coupenId,final String type, final Date validity, final String body, final String lowerLimit, final String upperLimit, final String  discORamt, final boolean alreadyUsed){
             if (type.equals("Discount")){
                 coupenTitle.setText(type);
 
@@ -99,41 +115,61 @@ public class MyRewardsAdapter extends RecyclerView.Adapter<MyRewardsAdapter.View
                 coupenTitle.setText("FLAT Rs."+discORamt+" OFF");
             }
             final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMMM/YYYY");
-            coupenExpiryDate.setText(simpleDateFormat.format(validity));
+
+            if (alreadyUsed)
+            { coupenExpiryDate.setText("Already Used");
+                coupenExpiryDate.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+                coupenBody.setTextColor(Color.parseColor("#50ffffff"));
+                coupenTitle.setTextColor(Color.parseColor("#50ffffff"));
+            }else {
+                coupenBody.setTextColor(Color.parseColor("#50ffffff"));
+                coupenTitle.setTextColor(Color.parseColor("#50ffffff"));
+                coupenExpiryDate.setTextColor(itemView.getContext().getResources().getColor(R.color.coupenPurple));
+                coupenExpiryDate.setText(simpleDateFormat.format(validity));
+            }
             coupenBody.setText(body);
 
             if (useminiLayout){
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-              coupenTitle.setText(type);
-                coupenExpiryDate.setText(simpleDateFormat.format(validity));
-                coupenBody.setText(body);
 
-                if (Long.valueOf(productOriginalPrice)>Long.valueOf(lowerLimit) && Long.valueOf(productOriginalPrice)<Long.valueOf(upperLimit)){
+                        if (!alreadyUsed) {
 
-                     if (type.equals("Discount")){
-                         Long discountAmount = Long.valueOf(productOriginalPrice)*Long.valueOf(discORamt)/100;
-                         discountedPrice.setText("Rs."+String.valueOf(Long.valueOf(productOriginalPrice)-discountAmount)+"/-");
-                     }else {
-                         discountedPrice.setText("Rs."+String.valueOf(Long.valueOf(productOriginalPrice)-Long.valueOf(discORamt))+"/-");
+                            // do nothing
 
-                     }
+                            selectedcoupenTitle.setText(type);
+                            selectedcoupenExpiryDate.setText(simpleDateFormat.format(validity));
+                            selectedcoupenBody.setText(body);
 
-                }else {
+                            if (Long.valueOf(productOriginalPrice) > Long.valueOf(lowerLimit) && Long.valueOf(productOriginalPrice) < Long.valueOf(upperLimit)) {
 
-                    discountedPrice.setText("Invalid");
-                    Toast.makeText(itemView.getContext(),"Sorry! Product does not matches the coupen terms.",Toast.LENGTH_LONG).show();
+                                if (type.equals("Discount")) {
+                                    Long discountAmount = Long.valueOf(productOriginalPrice) * Long.valueOf(discORamt) / 100;
+                                    discountedPrice.setText("Rs." + String.valueOf(Long.valueOf(productOriginalPrice) - discountAmount) + "/-");
+                                } else {
+                                    discountedPrice.setText("Rs." + String.valueOf(Long.valueOf(productOriginalPrice) - Long.valueOf(discORamt)) + "/-");
 
-                }
+                                }
 
-                        if (coupensRecyclerView.getVisibility() == View.GONE)
-                        {
-                            coupensRecyclerView.setVisibility(View.VISIBLE);
-                            selectedCoupen.setVisibility(View.GONE);
-                        }else {
-                            coupensRecyclerView.setVisibility(View.GONE);
-                            selectedCoupen.setVisibility(View.VISIBLE);
+
+                                DBqueries.cartitemModelList.get(cartItemPosition).setSelectedCoupenId(coupenId);
+
+                            } else {
+                                DBqueries.cartitemModelList.get(cartItemPosition).setSelectedCoupenId(null);
+
+                                discountedPrice.setText("Invalid");
+                                Toast.makeText(itemView.getContext(), "Sorry! Product does not matches the coupen terms.", Toast.LENGTH_LONG).show();
+
+                            }
+
+                            if (coupensRecyclerView.getVisibility() == View.GONE) {
+                                coupensRecyclerView.setVisibility(View.VISIBLE);
+                                selectedCoupen.setVisibility(View.GONE);
+                            } else {
+                                coupensRecyclerView.setVisibility(View.GONE);
+                                selectedCoupen.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });

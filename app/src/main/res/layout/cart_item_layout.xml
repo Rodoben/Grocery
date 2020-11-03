@@ -95,6 +95,7 @@
         android:layout_marginEnd="16dp"
         android:text="Offer applied"
         android:textColor="#8BC34A"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_price" />
 
@@ -106,6 +107,7 @@
         android:layout_marginEnd="16dp"
         android:text="coupens applied"
         android:textColor="#F44336"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offers_applied" />
 
@@ -143,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Check price after coupen code"
+            android:text="Apply your coupen here"
             android:textAlignment="center"
             android:textColor="#FFF7F7" />
 

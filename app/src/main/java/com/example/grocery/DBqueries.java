@@ -412,7 +412,7 @@ public class DBqueries {
                                                                       , documentSnapshot.get("product_price").toString()
                                                                       , documentSnapshot.get("cutted_price").toString()
                                                                       , (long)1
-                                                                      , (long)0
+                                                                      , (long)documentSnapshot.get("offers_applied")
                                                                       , (long)0
                                                                       ,true
                                                                       ,(long)documentSnapshot.get("max_quantity")
@@ -425,7 +425,7 @@ public class DBqueries {
                                                                       , documentSnapshot.get("product_price").toString()
                                                                       , documentSnapshot.get("cutted_price").toString()
                                                                       , (long)1
-                                                                      , (long)0
+                                                                      , (long)documentSnapshot.get("offers_applied")
                                                                       , (long)0
                                                                       ,false
                                                                       ,(long)documentSnapshot.get("max_quantity")
@@ -601,22 +601,25 @@ public  static  void loadRewards(final Context context, final Dialog loadingDial
                                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
                                                 if (documentSnapshot.get("type").toString().equals("Discount") && lastseenDate.before(documentSnapshot.getDate("validity")))
                                                 {
-                                                    rewardModelList.add(new RewardModel(documentSnapshot.get("type").toString()
+                                                    rewardModelList.add(new RewardModel(documentSnapshot.getId(),documentSnapshot.get("type").toString()
                                                             ,documentSnapshot.get("lower_limit").toString()
                                                             ,documentSnapshot.get("upper_limit").toString()
                                                             ,documentSnapshot.get("percentage").toString()
                                                             ,documentSnapshot.get("body").toString()
                                                             , (Date) documentSnapshot.getTimestamp("validity").toDate()
+                                                            ,(Boolean)documentSnapshot.get("alreadyUsed")
+
                                                     ));
                                                 }else if (documentSnapshot.get("type").toString().equals("Flat Rs.*OFF") && lastseenDate.before(documentSnapshot.getDate("validity")))
                                                     {
 
-                                                    rewardModelList.add(new RewardModel(documentSnapshot.get("type").toString()
+                                                    rewardModelList.add(new RewardModel(documentSnapshot.getId(),documentSnapshot.get("type").toString()
                                                             ,documentSnapshot.get("lower_limit").toString()
                                                             ,documentSnapshot.get("upper_limit").toString()
                                                             ,documentSnapshot.get("amount").toString()
                                                             ,documentSnapshot.get("body").toString()
                                                             , (Date) documentSnapshot.getTimestamp("validity").toDate()
+                                                            ,(Boolean)documentSnapshot.get("alreadyUsed")
                                                     ));
 
                                                 }

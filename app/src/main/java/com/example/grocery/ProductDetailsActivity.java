@@ -185,6 +185,8 @@ private TextView totalRatingsFigure;
         checkCoupenPriceDalog.setContentView(R.layout.coupen_redeem_dialog);
         checkCoupenPriceDalog.setCancelable(true);
         checkCoupenPriceDalog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
         ImageView toggleRecyclerView = checkCoupenPriceDalog.findViewById(R.id.toogle_recyclerView);
         coupensRecyclerView = checkCoupenPriceDalog.findViewById(R.id.coupen_recyclerView);
         selectedCoupen = checkCoupenPriceDalog.findViewById(R.id.selected_coupen);
